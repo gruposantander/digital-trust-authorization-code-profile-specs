@@ -49,7 +49,7 @@ organization="Santander Technology"
 
 .# Abstract
 
-This document defines the digital trust protocol authorization code flow, which allows End-Users share information with Clients in a secure way using OIDC and OAuth 2.0 protocols.
+This document defines the Digital Trust Protocol authorization code flow, which allows End-Users share verified information with Clients in a secure way using OIDC and OAuth 2.0 protocols.
 
 {mainmatter}
 
@@ -62,6 +62,8 @@ Most of the services require private information that is introduced by the user,
 We want to define a way that will help customers to share the minimum required level of details while allow services to get rich and trusted information from the customer, preserving and avoiding the risk of storing sensitive information.
 
 OIDC provides a mechanism to verify identity of the End-User based on authentication performed by an Auth Server and get Basic profile information. We would like to use this mechanism in order to provide certified information by a secure communication protocol, to achieve this we will use OpenId as base.
+
+The specification depicted in this document covers only the security profile for Digital Trust Protocol, other extensions will also complement the full protocol specifications.
 
 ## Notational conventions
 
