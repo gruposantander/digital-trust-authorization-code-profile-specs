@@ -83,7 +83,9 @@ This section describes how to perform a customer information share using the Aut
 ## Authorization Code Flow Steps
 
 These steps of the flow are illustrated in the following diagram:
-![authorization code flow](http://www.plantuml.com/plantuml/png/XLF1Rjim3BtxAtYCWHJfkbks30soOEjGp4QJhST0bTXOg2Db4bsi-nf_Yxzib1iPzk9jFXdYuoFv7ddjIJYg3cMI24dMmQhoP0_eacHjIDCBtENTRvOd_2qM_0Rt-E0ruMnvFC9YaIJyTF6XovuFui8_QRE7HwPNWaIIH1YdCDSSP66jHyYTVTOANQnnXpygz1JvtpCwO_IQUtuejI_WK54bIjZURc8376_gfiwppHPcscZIWl12L5HOftyXJ6IfqH18XmeDHqi_1NUgy-L-aoP9bZVrgT9tKMh51B1a0bYrgQE0I34Ut4XxH0_s4QZee30H7Wx2CCAwbnHM1SgdCBKKfiCmtYCe9A5BFo1VEUpLtLLEm-JRtTSKc14yKs8OXrE2B4qTLFwytUPmTVccdpHjQlnvr0xzJfjMzywRfPHu91zT67NvxUKLt5efI5ipXrcdyxiez8sQzikbG--pl9_qzvmiZ-ZiWQKmVSUWyhnS_OI87tZmIgsPsWStGWMb7SgeGe-ngNjTlYuTpDiL20moi4rkxLwRz0mtFwa6qXhFQ9Z11akk0jhm-XzQeO0i-48udC5IAVWeI7Iht--zTJ4oSU2VsW_6uLH1EELSnRr6WLlaHNXBpq_mqteB0-0k04zCqVW0REhdg6aRYyUwjKzeuCOGEba8iyS_phQf_tEty7gq57Z6xtIil-7SUoSClHnnVWuTNlRpoE762RNQdPe8wsKTxyGwdRAERAttCuUF3dsH9lnTer7LeVmD)
+!---
+![svg](DiagramRFC.svg "Diagram")
+!---
 
 The Authorization Code Flow goes through the following steps: (separated in groups as in the flow diagram)
 
@@ -784,7 +786,7 @@ IOo5yIBxImQOSk5jz31gF9RJb15SDBIxonuWv8qAERyUfvrmEwR0kg==
   <front>
     <title>Uniform Resource Names</title>
     <author initials="R." surname="Moats" fullname="Ryan Moats">
-      <organization>AT&T</organization>
+      <organization><![CDATA[AT&T]]></organization>
     </author>
    <date month="May" year="1997"/>
   </front>

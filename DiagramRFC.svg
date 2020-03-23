@@ -1,0 +1,214 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="602.482px" preserveAspectRatio="none" version="1.1" viewBox="0 0 807 602" width="807.838px">
+  <defs/>
+  <g>
+    <line x1="23.514" x2="23.514" y1="45.0931" y2="556.9603" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="191.2476" x2="191.2476" y1="45.0931" y2="556.9603" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="517.8315" x2="517.8315" y1="45.0931" y2="556.9603" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="4.1803" y="43.3678">Customer</text>
+    <ellipse cx="23.514" cy="6.7929" fill="white" rx="4.1803" ry="4.1803" stroke="black" stroke-width="1.0450685826257349"/>
+    <path d="M23.514,10.9732 L23.514,25.0816 M16.7211,15.1535 L30.307,15.1535 M23.514,25.0816 L16.7211,32.9197 M23.514,25.0816 L30.307,32.9197 " fill="none" stroke="black" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="4.1803" y="563.2282">Customer</text>
+    <ellipse cx="23.514" cy="570.1788" fill="white" rx="4.1803" ry="4.1803" stroke="black" stroke-width="1.0450685826257349"/>
+    <path d="M23.514,574.3591 L23.514,588.4675 M16.7211,578.5394 L30.307,578.5394 M23.514,588.4675 L16.7211,596.3055 M23.514,588.4675 L30.307,596.3055 " fill="none" stroke="black" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="184.7159" y="43.3678">RP</text>
+    <ellipse cx="191.2476" cy="28.2169" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"/>
+    <line x1="184.9771" x2="197.518" y1="35.5323" y2="35.5323" stroke="black" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="184.7159" y="563.2282">RP</text>
+    <ellipse cx="191.2476" cy="573.314" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"/>
+    <line x1="184.9771" x2="197.518" y1="580.6295" y2="580.6295" stroke="black" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="511.0385" y="43.3678">OP</text>
+    <ellipse cx="517.8315" cy="28.2169" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"/>
+    <line x1="511.5611" x2="524.1019" y1="35.5323" y2="35.5323" stroke="black" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="511.0385" y="563.2282">OP</text>
+    <ellipse cx="517.8315" cy="573.314" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"/>
+    <line x1="511.5611" x2="524.1019" y1="580.6295" y2="580.6295" stroke="black" stroke-width="1.0450685826257349"/>
+    <rect fill="white" height="1.5676" width="800" x="1.5676" y="61.0651" stroke="white" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="61.0651" y2="61.0651" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="62.6327" y2="62.6327" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <rect fill="white" height="12.0877" width="72.6323" x="365.2515" y="55.5438" stroke="#000000" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="368.3867" y="63.9393">RP Website/App</text>
+    <polygon fill="black" points="29.2619,81.8093,24.0366,83.8994,29.2619,85.9895,27.1718,83.8994" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="26.1267" x2="190.725" y1="83.8994" y2="83.8994" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="81.2523">Website/App asking for data</text>
+    <polygon fill="black" points="184.9771,97.0322,190.2025,99.1223,184.9771,101.2124,187.0673,99.1223" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="23.514" x2="188.1123" y1="99.1223" y2="99.1223" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="27.1718" y="96.4752">choose Provider</text>
+    <rect fill="white" height="1.5676" width="800" x="1.5676" y="114.0492" stroke="white" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="114.0492" y2="114.0492" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="115.6168" y2="115.6168" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <rect fill="white" height="12.0877" width="54.8661" x="374.1346" y="108.5279" stroke="#000000" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="377.2698" y="116.9234">RP Request</text>
+    <polygon fill="black" points="196.9954,134.7934,191.7701,136.8836,196.9954,138.9737,194.9053,136.8836" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="511.5611,134.7934,516.7864,136.8836,511.5611,138.9737,513.6512,136.8836" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="193.8602" x2="514.6963" y1="136.8836" y2="136.8836" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="134.2365">Establish mutual TLS</text>
+    <polygon fill="black" points="511.5611,150.0163,516.7864,152.1065,511.5611,154.1966,513.6512,152.1065" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="191.2476" x2="514.6963" y1="152.1065" y2="152.1065" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="194.9053" y="149.4594">POST /initiate-authorize (client credentials, request JWS)</text>
+    <line x1="517.8315" x2="539.7779" y1="167.3294" y2="167.3294" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="167.3294" y2="174.1223" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="174.1223" y2="174.1223" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,172.0322,518.354,174.1223,523.5794,176.2124,521.4892,174.1223" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="164.6822">Validate Auth Client</text>
+    <line x1="517.8315" x2="539.7779" y1="189.3452" y2="189.3452" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="189.3452" y2="196.1381" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="196.1381" y2="196.1381" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,194.048,518.354,196.1381,523.5794,198.2283,521.4892,196.1381" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="186.6981">Validate request</text>
+    <line x1="517.8315" x2="539.7779" y1="211.361" y2="211.361" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="211.361" y2="218.154" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="218.154" y2="218.154" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,216.0638,518.354,218.154,523.5794,220.2441,521.4892,218.154" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="208.7139">Validate Scopes of the request (as mandatory) Check RP can request these details</text>
+    <line x1="517.8315" x2="539.7779" y1="233.3769" y2="233.3769" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="233.3769" y2="240.1698" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="240.1698" y2="240.1698" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,238.0797,518.354,240.1698,523.5794,242.26,521.4892,240.1698" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="230.7298">Create request_uri (URN) and store JWS</text>
+    <polygon fill="black" points="196.9954,253.3026,191.7701,255.3927,196.9954,257.4829,194.9053,255.3927" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="193.8602" x2="517.3089" y1="255.3927" y2="255.3927" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="252.7456">HTTP 201 request_uri, expires_in</text>
+    <rect fill="white" height="1.5676" width="800" x="1.5676" y="270.3196" stroke="white" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="270.3196" y2="270.3196" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="271.8872" y2="271.8872" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <rect fill="white" height="12.0877" width="114.9575" x="344.0888" y="264.7983" stroke="#000000" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="347.224" y="273.1938">Customer Accepts Request</text>
+    <polygon fill="black" points="29.2619,291.0638,24.0366,293.154,29.2619,295.2441,27.1718,293.154" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="26.1267" x2="190.725" y1="293.154" y2="293.154" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="290.5069">302 Location: /authorize; (clientId, request_uri)</text>
+    <polygon fill="black" points="511.5611,306.2867,516.7864,308.3769,511.5611,310.467,513.6512,308.3769" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="23.514" x2="514.6963" y1="308.3769" y2="308.3769" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="27.1718" y="305.7298">/authorize (clientId, request_uri)</text>
+    <line x1="517.8315" x2="539.7779" y1="323.5998" y2="323.5998" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="323.5998" y2="330.3927" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="330.3927" y2="330.3927" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,328.3026,518.354,330.3927,523.5794,332.4829,521.4892,330.3927" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="320.9527">Obtain request JWS using request_uri</text>
+    <line x1="517.8315" x2="539.7779" y1="345.6156" y2="345.6156" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="345.6156" y2="352.4086" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="352.4086" y2="352.4086" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,350.3184,518.354,352.4086,523.5794,354.4987,521.4892,352.4086" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="342.9685">Validate clientid, scope, redirect_uri, request JWS </text>
+    <polygon fill="black" points="29.2619,365.5413,24.0366,367.6315,29.2619,369.7216,27.1718,367.6315" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="511.5611,365.5413,516.7864,367.6315,511.5611,369.7216,513.6512,367.6315" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="26.1267" x2="514.6963" y1="367.6315" y2="367.6315" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="364.9843">Authenticate (Login)</text>
+    <polygon fill="black" points="29.2619,380.7642,24.0366,382.8543,29.2619,384.9445,27.1718,382.8543" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="511.5611,380.7642,516.7864,382.8543,511.5611,384.9445,513.6512,382.8543" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="26.1267" x2="514.6963" y1="382.8543" y2="382.8543" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="380.2072">Accept consent / Select information to share/ Add Data Provider</text>
+    <line x1="517.8315" x2="539.7779" y1="398.0772" y2="398.0772" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="398.0772" y2="404.8702" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="404.8702" y2="404.8702" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,402.78,518.354,404.8702,523.5794,406.9603,521.4892,404.8702" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="395.4301">store consent</text>
+    <polygon fill="black" points="29.2619,418.0029,24.0366,420.0931,29.2619,422.1832,27.1718,420.0931" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="26.1267" x2="517.3089" y1="420.0931" y2="420.0931" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="417.446">302 Location: redirect_uri, state, code (authorization-code)</text>
+    <polygon fill="black" points="184.9771,433.2258,190.2025,435.316,184.9771,437.4061,187.0673,435.316" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="23.514" x2="188.1123" y1="435.316" y2="435.316" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="27.1718" y="432.6689">GET authorization_code, state</text>
+    <line x1="191.2476" x2="213.194" y1="450.5389" y2="450.5389" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="213.194" x2="213.194" y1="450.5389" y2="457.3318" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="191.7701" x2="213.194" y1="457.3318" y2="457.3318" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="196.9954,455.2417,191.7701,457.3318,196.9954,459.4219,194.9053,457.3318" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="194.9053" y="447.8917">validate state</text>
+    <rect fill="white" height="1.5676" width="800" x="1.5676" y="472.2587" stroke="white" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="472.2587" y2="472.2587" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <line x1="1.5676" x2="801.5676" y1="473.8263" y2="473.8263" stroke="#000000" stroke-width="0.5225342913128674"/>
+    <rect fill="white" height="12.0877" width="94.5787" x="354.2782" y="466.7374" stroke="#000000" stroke-width="1.0450685826257349"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="357.4135" y="475.1329">RP Token Interchange</text>
+    <polygon fill="black" points="196.9954,493.0029,191.7701,495.0931,196.9954,497.1832,194.9053,495.0931" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="511.5611,493.0029,516.7864,495.0931,511.5611,497.1832,513.6512,495.0931" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="193.8602" x2="514.6963" y1="495.0931" y2="495.0931" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="492.446">Establish mutual TLS</text>
+    <polygon fill="black" points="511.5611,508.2258,516.7864,510.316,511.5611,512.4061,513.6512,510.316" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="191.2476" x2="514.6963" y1="510.316" y2="510.316" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="194.9053" y="507.6689">POST /token (client credentials, authorization_code, redirect_uri, grantype:authorization_code)</text>
+    <line x1="517.8315" x2="539.7779" y1="525.5389" y2="525.5389" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="539.7779" x2="539.7779" y1="525.5389" y2="532.3318" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="518.354" x2="539.7779" y1="532.3318" y2="532.3318" stroke="black" stroke-width="0.5225342913128674"/>
+    <polygon fill="black" points="523.5794,530.2417,518.354,532.3318,523.5794,534.4219,521.4892,532.3318" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="522.8917">validate request</text>
+    <polygon fill="black" points="196.9954,545.4646,191.7701,547.5547,196.9954,549.6448,194.9053,547.5547" stroke="black" stroke-width="0.5225342913128674"/>
+    <line x1="193.8602" x2="517.3089" y1="547.5547" y2="547.5547" stroke="black" stroke-width="0.5225342913128674"/>
+    <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="544.9076">id_token (JWS or JWE), (access/refresh)</text>
+    <!--MD5=[2ec629e32d5665218b015c0a5b21004d]
+@startuml
+scale max 800 width
+actor Customer
+
+Entity RP
+
+Entity OP
+
+
+
+== RP Website/App ==
+
+RP -> Customer: Website/App asking for data
+
+Customer -> RP: choose Provider
+
+== RP Request ==
+
+RP <-> OP: Establish mutual TLS
+
+RP -> OP:  POST /initiate-authorize (client credentials, request JWS)
+
+OP -> OP: Validate Auth Client
+
+OP -> OP: Validate request
+
+OP -> OP: Validate Scopes of the request (as mandatory) Check RP can request these details
+
+OP -> OP: Create request_uri (URN) and store JWS
+
+OP -> RP: HTTP 201 request_uri, expires_in
+
+== Customer Accepts Request ==
+
+RP -> Customer: 302 Location: /authorize; (clientId, request_uri)
+
+Customer -> OP: /authorize (clientId, request_uri)
+
+OP -> OP: Obtain request JWS using request_uri
+
+OP -> OP: Validate clientid, scope, redirect_uri, request JWS 
+
+Customer <-> OP : Authenticate (Login)
+
+Customer <-> OP: Accept consent / Select information to share/ Add Data Provider
+
+OP -> OP: store consent
+
+OP -> Customer: 302 Location: redirect_uri, state, code (authorization-code)
+
+Customer -> RP: GET authorization_code, state
+
+RP -> RP:  validate state
+
+== RP Token Interchange ==
+
+RP <-> OP: Establish mutual TLS
+
+RP -> OP: POST /token (client credentials, authorization_code, redirect_uri, grantype:authorization_code)
+
+OP -> OP: validate request
+
+OP -> RP: id_token (JWS or JWE), (access/refresh)
+@enduml
+
+PlantUML version 1.2020.03beta11(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.7.0_25-b15
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+  </g>
+</svg>
