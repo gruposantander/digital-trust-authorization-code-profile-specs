@@ -23,7 +23,7 @@ RFC needs a very specific RFC format described in [RFC7996](https://tools.ietf.o
 An easy way to use it is using a docker image with python, so we can avoid install python in our local mahcine. To run the image use:
 
 ```
-docker run -v -t "`pwd`:/data" python:3
+docker run -t -v "`pwd`:/data" python:3
 ```
 
 This command will mount you current path to a volume called data in the docker. Now install the tool using:
