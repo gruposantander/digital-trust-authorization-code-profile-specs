@@ -410,6 +410,44 @@ CflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVDzAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8
 C1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTner1U2j77B\_X01\_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
 ```
 
+## Initiate authorize endpoint phishing 
+In this attack, the RP developer is social engineered into believing that the initiate authorize endpoint has been changed to a URL that is controlled by the attacker. As the result, the client could send sensitive details to a rogue OP and the attacker will get hold of sensitive data.
+
+This can be partially  mitigated by having the RP to enquiry the value of the above endpoint by calling the well known configuration endpoint. Alternatively, JWE could be used when sending requests.
+
+
+## Token endpoint phishing 
+In this attack, the RP developer is social engineered into believing that the token endpoint has been changed to a URL that is controlled by the attacker. As the result, the client could send an authorization code and a valid credential to a rogue OP. The attacked could then use them to retrieve the token from the honest OP.
+
+This can be partially  mitigated by having the RP to enquiry the value of the above endpoint by calling the well known configuration endpoint. Alternatively, token can be returned encrypted as JWE.
+
+Mutual TLS will prevent this attack, since the token endpoint cannot be called without a valid client certificate.
+
+## Cryptographic Considerations
+
+### TLS considerations
+The minimum version of TLS MUST be v1.2.
+
+Use only ciphersuites that ensure perfect forward secrecy (PFS) and authenticated encryption with associated data (AEAD). Therefore, encryption should be either AES with GCM or CHACHA20 with POLY1305, while key exchange and authentication SHOULD be part of ECDHE_RSA, ECDHE_ECDSA, DHE_RSA, DHE_DSS, CECPQ1 (together with all TLS 1.3 ciphers).
+
+Examples of valid ciphers:
+```
+TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+```
+
+### JWS signing algorithms considerations
+
+The following alghorithms SHALL NOT be allowd:
+ * _none:_ It does not provide any form of authenticity nor integrity
+ * _hmac:_ It does relies on the knowledge of a pre-shared key between OP and RP
+
+It is reccomended to 
+1.  Not use PKCS #1 v1.5 (RS256, RS384, RS512)
+2.  Use PS256, ES256 or better
+
+
+
 # Data Examples
 
 The following sections show examples about request and responses that are used in the protocol flow.
