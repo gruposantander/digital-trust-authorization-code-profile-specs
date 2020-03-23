@@ -45,6 +45,14 @@ organization="Santander Technology"
     [author.address]
     email = "Jorge.OlivaFernandez@santander.co.uk"
 
+[[author]]
+initials="D."
+surname="Bianchini"
+fullname="Davide Bianchini"
+organization="Santander Technology"
+    [author.address]
+    email = "davide.bianchini@santander.co.uk"
+
 %%%
 
 .# Abstract
@@ -656,6 +664,9 @@ VXl8rgZNeX/5/4nJ8Q3LrdLau1Iz620trNRGU6sGMs3x4WQbSq93RRbFzfG1oK74
 IOo5yIBxImQOSk5jz31gF9RJb15SDBIxonuWv8qAERyUfvrmEwR0kg==
 -----END RSA PRIVATE KEY-----
 ```
+
+## Acknowledgements
+The authors would like to acknowledge Desislava Ilieva and James Begg for their vital support and feedback.
 
 {backmatter}
 
