@@ -4,13 +4,13 @@ This repo contain the source of the "DTP authorization code Flow" specification 
 
 ## How to use it?
 
-The repo contain the specification in markdown file, to generate the xml/html file use the toll [markdown2rfc](https://github.com/oauthstuff/markdown2rfc) as follow:
+The repo contain the specification in markdown file, to generate the xml/html file use the tool [markdown2rfc](https://github.com/oauthstuff/markdown2rfc), to help the process you just need to exceute the `build.sh` file:
 
 ```
-docker run -v "`pwd`:/data" danielfett/markdown2rfc dtp-authorization-code-flow.md
+./build.sh 
 ```
 
-This command should be executed in the root folder of this repo, the instruction `-v "``pwd``:/data"` will get the current path and mount as volume in a data folder in the image.
+After that a new folder called `dist` should be generated with the html and xml file.
 
 ## Diagram image
 
