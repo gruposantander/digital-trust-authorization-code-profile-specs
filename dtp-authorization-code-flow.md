@@ -57,7 +57,7 @@ organization="Santander Technology"
 
 .# Abstract
 
-This document defines the digital trust protocol authorization code flow, which allows End-Users share information with Clients in a secure way using OIDC and OAuth 2.0 protocols.
+This document defines the Digital Trust Protocol authorization code flow, which allows End-Users share verified information with Clients in a secure way using OIDC and OAuth 2.0 protocols.
 
 {mainmatter}
 
@@ -70,6 +70,8 @@ Most of the services require private information that is introduced by the user,
 We want to define a way that will help customers to share the minimum required level of details while allow services to get rich and trusted information from the customer, preserving and avoiding the risk of storing sensitive information.
 
 OIDC provides a mechanism to verify identity of the End-User based on authentication performed by an Auth Server and get Basic profile information. We would like to use this mechanism in order to provide certified information by a secure communication protocol, to achieve this we will use OpenId as base.
+
+The specification depicted in this document covers only the security profile for Digital Trust Protocol, other extensions will also complement the full protocol specifications.
 
 ## Notational conventions
 
@@ -113,7 +115,7 @@ Once the RP gets the provider selected by the customer the steps to initiate the
 
 1. It is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS. 
 2. RP sends the request to the Initiate Authorization endpoint in OP to initiate the process, the auhtorization data is sent inside a request object as described in section [Initiate Authorization Request](#initi-auth-req) of this specification.
-3. OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC],** additionally MUST validate the _request JWS _ following Section 6.3. of [@!OIDC] specification.
+3. OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC], additionally MUST validate the _request JWS _ following Section 6.3. of [@!OIDC] specification.
 4. If validations are correct the OP MUST store the JWS and generate a request\_uri that identify where is located. As described in [@!OAuth.PAR] specification.
 5. OP will return to the RP a response with the format described in section [Successful Initiate Authorization Response](#succ-init-auth-resp) of this specification.
 6. In case of any error OP will return an error response as described in section [Initiate Authorization Error Response](#err-init-auth-resp)  of this specification.
@@ -127,7 +129,7 @@ Once the OP has validated the request JWS from RP, the user authentication and c
 3. OP MUST obtain the request JWS from storage using the _request\_uri_ parameter, OP MUST check that request\_uri is still valid and not expired.
 4. OP then MUST validate the request as described in Section 3.1.2.2. of [@!OIDC], OP MUST be aware that even if the request\_uri parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
 5. If the request is valid, the OP attempts to Authenticate the End-User or determines whether the End-User is Authenticated, the way to authenticate the user (user, password, 2FA, cookies... ) is out of the scope of this specification. The normal approach is to present the user one or more pages (steps auth) to authenticate the user. More details in Section 3.1.2.3. of [@!OIDC].
-6. Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End\_user to take a decision, in this case please follow the security recommendations described in section**.** The customer then accepts or selects information to share with the RP.
+6. Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End\_user to take a decision, in this case please follow the security recommendations described in section [Security Considetarions](#security-considerations). The customer then accepts or selects information to share with the RP.
 7. Once customer consents the request, OP will store the consent information (which claims has been consented) and generates an authorization code. 
 8. OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the _redirect\_uri_ and as query parameter the generated _code,_ as described in Section 3.1.2.5. of [@!OIDC]. Example of the response: [Successful Authorize response](#succ-auth-resp). 
 9. In case of any error OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.2.6 of [@!OIDC].
@@ -377,7 +379,7 @@ If the authorization server implement the DTP profile, it SHOULD include the fol
 
 * "digital\_trust\_protocol\_extension" : A boolean field with value _true to inform the RP this OP implement this profile._
 
-# Security Considerations
+# Security Considerations {#security-considerations}
 
 ## Native Apps
 
