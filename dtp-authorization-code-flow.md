@@ -116,7 +116,7 @@ Once the RP gets the provider selected by the customer the steps to initiate the
 1. It is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS. 
 2. RP sends the request to the Initiate Authorization endpoint in OP to initiate the process, the auhtorization data is sent inside a request object as described in section [Initiate Authorization Request](#initi-auth-req) of this specification.
 3. OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC], additionally MUST validate the _request JWS _ following Section 6.3. of [@!OIDC] specification.
-4. If validations are correct the OP MUST store the JWS and generate a request\_uri that identify where is located. As described in [@!OAuth.PAR] specification.
+4. If validations are correct the OP MUST store the JWS and generate a request_uri that identify where is located. As described in [@!OAuth.PAR] specification.
 5. OP will return to the RP a response with the format described in section [Successful Initiate Authorization Response](#succ-init-auth-resp) of this specification.
 6. In case of any error OP will return an error response as described in section [Initiate Authorization Error Response](#err-init-auth-resp)  of this specification.
 
@@ -126,10 +126,10 @@ Once the OP has validated the request JWS from RP, the user authentication and c
 
 1. RP responds to the user with a HTTP 302 redirect response as described in Section 3.1.2.1 of [@!OIDC], containing in Location header the url with the needed params to make an authentication Request to OP. An example of this response can be found in [Authorize redirect response](#auth-redirect-resp)
 2. The customer User Agent follows the redirection and make an Authentication Request to the Authorization Endpoint in OP. Example of the request: [Authentication request](#auth-req).
-3. OP MUST obtain the request JWS from storage using the _request\_uri_ parameter, OP MUST check that request\_uri is still valid and not expired.
-4. OP then MUST validate the request as described in Section 3.1.2.2. of [@!OIDC], OP MUST be aware that even if the request\_uri parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
+3. OP MUST obtain the request JWS from storage using the _request\_uri_ parameter, OP MUST check that request_uri is still valid and not expired.
+4. OP then MUST validate the request as described in Section 3.1.2.2. of [@!OIDC], OP MUST be aware that even if the request_uri parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
 5. If the request is valid, the OP attempts to Authenticate the End-User or determines whether the End-User is Authenticated, the way to authenticate the user (user, password, 2FA, cookies... ) is out of the scope of this specification. The normal approach is to present the user one or more pages (steps auth) to authenticate the user. More details in Section 3.1.2.3. of [@!OIDC].
-6. Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End\_user to take a decision, in this case please follow the security recommendations described in section [Security Considetarions](#security-considerations). The customer then accepts or selects information to share with the RP.
+6. Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End-user to take a decision, in this case please follow the security recommendations described in section [Security Considetarions](#security-considerations). The customer then accepts or selects information to share with the RP.
 7. Once customer consents the request, OP will store the consent information (which claims has been consented) and generates an authorization code. 
 8. OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the _redirect\_uri_ and as query parameter the generated _code,_ as described in Section 3.1.2.5. of [@!OIDC]. Example of the response: [Successful Authorize response](#succ-auth-resp). 
 9. In case of any error OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.2.6 of [@!OIDC].
@@ -157,7 +157,7 @@ Initiate Authorization Request follow the specification described in Section 2.1
 
 OP MUST support the use of the HTTP POST method defined in [@!RFC2616] at the Initiate Authorization Endpoint. The Client uses a HTTPS POST to send a parameter "request" with a signed JWT that should contain the data explained in section 3.1.2.1 of [@!OIDC]. Request parameters are serialized using Form Serialization as described in section 13.2. of [@!OIDC]. This JWT is a "Request Object" as described in Section 6 of [@!OIDC].
 
-The Client MUST authenticate with the Initiate Authorization Endpoint using the authentication method registered for its client\_id, as described in Section [Client Authentication Methods.](#client-auth-methods)
+The Client MUST authenticate with the Initiate Authorization Endpoint using the authentication method registered for its client_id, as described in Section [Client Authentication Methods.](#client-auth-methods)
 
 The following is a non-normative example of a Initiate Authorization Request. (line wraps within JWS for display purposes only)
 
@@ -172,16 +172,16 @@ E0Ni05NzdmYzVmODdkYjkiLCJyZWRpcmVjdF91cmkiOiJodHRwczovL3JwLmV4YW1wbGUub3JnL2NiIi
 GlmanNsZGtqIiwibm9uY2UiOiJuLTAxMF9NMTZVMzEiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsiZ2l2ZW5fbmFtZSI6eyJlc3NlbnRpYWwiOnRydWV9LCJm
 YW1pbHlfbmFtZSI6eyJlc3NlbnRpYWwiOnRydWV9LCJwYXNzcG9ydF9udW1iZXIiOm51bGwsIm5hdGlvbmFsaXR5IjpudWxsLCJiaXJ0aGRhdGUiOnsiZXN
 zZW50aWFsIjp0cnVlfSwicGxhY2Vfb2ZfYmlydGgiOm51bGx9fSwiaWF0IjoxNTY4NzI0OTQ5LCJuYmYiOjE1Njg3MjQ5NDksImV4cCI6MTU2ODcyNTAwOS
-wianRpIjoiYTMyNGM5YWMtYTQ3Yy00MWE4LWFkM2ItMDY5M2IxODE3ZGM5In0.EojFJ5r\_FgDGcQS9kjKgwgs759DN6MlS9di\_LCnwN2le0PFo51fVYKLwu
-pIfnCduY\_i2iPgVuCMlx9UM5WV9FdogDf-r1BoF-cp9FLCCd8x-C9VIXKHTXO5jkQ-6jiOG1X00gK7s9-zL7DGlFjXYy8FKiyB1ByZ3onEI4IFFCnJyq3PuTK6UqIYVOOsQ\_JgkQvtSdRFVF3jQUzT5bcZb8vGhLL8LGRktfa7CtI-6iHkZzRvcyQvB65hT3yUsC7qxA8UHazHN4n8jIh\_vjoMmopMNhFnRzUdEQyuF5l25uJkr5gYbzcrzJPA0byTp4h186muiAxQKWookHSIUNO-ubQ
- &client\_assertion\_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
- &client\_assertion=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiL
+wianRpIjoiYTMyNGM5YWMtYTQ3Yy00MWE4LWFkM2ItMDY5M2IxODE3ZGM5In0.EojFJ5r_FgDGcQS9kjKgwgs759DN6MlS9di_LCnwN2le0PFo51fVYKLwu
+pIfnCduY_i2iPgVuCMlx9UM5WV9FdogDf-r1BoF-cp9FLCCd8x-C9VIXKHTXO5jkQ-6jiOG1X00gK7s9-zL7DGlFjXYy8FKiyB1ByZ3onEI4IFFCnJyq3PuTK6UqIYVOOsQ_JgkQvtSdRFVF3jQUzT5bcZb8vGhLL8LGRktfa7CtI-6iHkZzRvcyQvB65hT3yUsC7qxA8UHazHN4n8jIh_vjoMmopMNhFnRzUdEQyuF5l25uJkr5gYbzcrzJPA0byTp4h186muiAxQKWookHSIUNO-ubQ
+ &client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+ &client_assertion=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiL
 TRhYzQtYmE0Ni05NzdmYzVmODdkYjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsInN1YiI6IjNkZmQ4OWUxLTk2NGItNGFjNC1i
 YTQ2LTk3N2ZjNWY4N2RiOSIsImlhdCI6MTU3MDAyMjU3NiwibmJmIjoxNTcwMDIyNTc2LCJleHAiOjE1NzAwMjI2MzYsImp0aSI6IjcwMzNhMDV
-lLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N\_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nDmglkyyCj3ZJvvxjNE-c6H6wK7
+lLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nDmglkyyCj3ZJvvxjNE-c6H6wK7
 mEbL5d1StP1dhK7iARAkDH-7Jm-CxmcnmvbiqINkVjjkzrww3BMfwa87MPXga7C8-5u8VXokbfiCflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVD
 zAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8rto3xB7af5wfTJuvsXIIC1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTn
-er1U2j77B\_X01\_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
+er1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
 ```
   
 ## Initiate Authorization Request Validation
@@ -197,9 +197,9 @@ If the Authorization Server encounters any error, it MUST return an error respon
 
 ## Successful Initiate Authorization Response {#succ-init-auth-resp}
 
-If the verification is successful, the authorization server shall generate a request URI and return a JSON payload that contains request\_uri and expires\_in claims at the top level with 201 Created HTTP response code, as described in Section 2.2. of [@!OAuth.PAR].
+If the verification is successful, the authorization server shall generate a request URI and return a JSON payload that contains request_uri and expires_in claims at the top level with 201 Created HTTP response code, as described in Section 2.2. of [@!OAuth.PAR].
 
-The request\_uri shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The request URI shall be bound to the client identifier of the client that posted the request object. Since the request URI can be replayed, its lifetime should be short and preferably limited to one-time use.
+The request_uri shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The request URI shall be bound to the client identifier of the client that posted the request object. Since the request URI can be replayed, its lifetime should be short and preferably limited to one-time use.
 
 The value of these claims in the JSON payload shall be as follows:
 
@@ -215,15 +215,15 @@ Date: Tue, 2 May 2017 15:22:31 GMT
 Content-Type: application/json
 
 {
-    "request\_uri": "urn:example:Y7AyOKAK",
-    "expires\_in": 3600,
-	"errors": \[{ "group": "id\_token","key": "familo\_name","description": "unknown claim."}
+    "request_uri": "urn:example:Y7AyOKAK",
+    "expires_in": 3600,
+	"errors": { "group": "id_token","key": "familo_name","description": "unknown claim."}
 }
 ```
 
-Note that request\_uri can be either URL or URN, within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI nor rely on the entropy of the URI for the confidentiality of the request object.
+Note that request_uri can be either URL or URN, within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI nor rely on the entropy of the URI for the confidentiality of the request object.
 
-When the request object is stored at the authorization server, the request\_uri value typically is a [@!URN].
+When the request object is stored at the authorization server, the request_uri value typically is a [@!URN].
 
 ## Initiate Authorization Error Response {#err-init-auth-resp}
 
@@ -245,8 +245,8 @@ Cache-Control: no-store
 Pragma: no-cache
 
 {
- "error": "invalid\_request\_object",
- "error\_description": "Incorrect signature"
+ "error": "invalid_request_object",
+ "error_description": "Incorrect signature"
 }
 ```
 
@@ -256,32 +256,32 @@ The Client MUST validate that the Inititate Authorization Response contains a va
 
 ## _errors_ member in Successful Initiate Authorization Response {#error-member}
 
-This specification add an additional field called _errors_ in the successful response of the initiate authorize response, the original fields (request\_uri and expires\_in) are described in in Section 2.2. of [@!OAuth.PAR].
+This specification add an additional field called _errors_ in the successful response of the initiate authorize response, the original fields (request_uri and expires_in) are described in in Section 2.2. of [@!OAuth.PAR].
 
 _errors_ member is an OPTIONAL field of type array that contain a list of errors that are detected in the _claims request parameter_ (see section 5.5. of [@!OIDC].
 
-The purpose of this new field is to avoid the RP wait until the end of the process when exchange the code for the id\_token in the /token endpoint or when obtain the claims in the user info endpoint using the access\_token to know about an error in the request syntax, this fields give the RP a quick feedback in the success response, this means that RP can continue with the process but is already aware about the problem.
+The purpose of this new field is to avoid the RP wait until the end of the process when exchange the code for the id_token in the /token endpoint or when obtain the claims in the user info endpoint using the access_token to know about an error in the request syntax, this fields give the RP a quick feedback in the success response, this means that RP can continue with the process but is already aware about the problem.
 
 The following is a non-normative example of a _errors_ member structure
 
 ```
-"errors": \[
+"errors": [
 	{ 
-		"group": "id\_token",
-		"key": "familo\_name",
+		"group": "id_token",
+		"key": "familo_name",
 		"description": "unknown claim."
 	},
 	{
 		"group": "userinfo",
-		"key": "given\_name",
+		"key": "given_name",
 		"description": "unknown member inside claim"
 	}
-\]
+]
 ```
 
 Each array object contain the next fields:
 
-* "group": The group "id\_token" or "userinfo" where claim is requested.
+* "group": The group "id_token" or "userinfo" where claim is requested.
 * "key": The claim name that contain the problem.
 * "description": An error description to help RP developer.
 
@@ -300,7 +300,7 @@ The Initiate Authorization Endpoint has some restrictions or add ons to the orig
 
 # txn Claim
 
-As part of this specification a new claim called txn should be introduced by the OP in all the id\_tokens generated and also in the /user-info responses, this claim as defined in [@!RFC8417] is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.
+As part of this specification a new claim called txn should be introduced by the OP in all the id_tokens generated and also in the `/userinfo` endpoint responses, this claim as defined in [@!RFC8417] is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.
 
 This transaction data MUST be stored as long as it is required to store transaction data for auditing purposes by the respective regulation.
 
@@ -334,15 +334,15 @@ Authentication server (aka OP) specification statements:
 2. MAY support mutual TLS connections.
 3. if mutual TLS is not possible, Authorization Server SHALL require use of TLS in the endpoints. See Section 16.17 of [@!OIDC] for more information on using TLS. 
 4. SHALL validate for token and initiate-authorize endpoint that Client is authenticated, as described in Section [Client Authentication Methods](#client-auth-methods).
-5. SHALL require the response\_type values _code_;
+5. SHALL require the _response_type_ values _code_;
 6. SHALL require signed JWT request object, as described in Section 6.1. of [@!OIDC]
 7. SHALL require the _request\_uri_ parameter as defined in Section 6 of [@!OIDC] in the authentication request;
-8. SHALL require that request\_uri has been generated by this OP in the endpoint Initiate Authorize and indicates the location of a JWT Request inside the Authentication Server.
+8. SHALL require that request_uri has been generated by this OP in the endpoint Initiate Authorize and indicates the location of a JWT Request inside the Authentication Server.
 9. SHALL support the initiate authorize endpoint, as described in section [Initiate Authorization Request](#initi-auth-req) of this specification.
 10. SHALL return signed ID Token. (JWS)
-11. SHALL ignore additional parameters passed using the OAuth 2.0 request syntax in the /authorize endpoint, only the client\_id param should be passed (will be used to identify the RP), the parameters for authorization should be passed previously inside request\_object in initiate authorize endpoint. This statement contradict section 6.1. of [@!OIDC]
+11. SHALL ignore additional parameters passed using the OAuth 2.0 request syntax in the /authorize endpoint, only the client_id param should be passed (will be used to identify the RP), the parameters for authorization should be passed previously inside request_object in initiate authorize endpoint. This statement contradict section 6.1. of [@!OIDC]
 12. SHALL validate _openid_ value is present in scopes in all authorization requests.
-13. SHALL generate and include the _txn_ claim in all the generated id\_tokens and claim responses (user info) to maintain a audit trail and traceability for all the Open ID process. (From beginning to end of the transaction)
+13. SHALL generate and include the _txn_ claim in all the generated id_tokens and claim responses (user info) to maintain a audit trail and traceability for all the Open ID process. (From beginning to end of the transaction)
 
 # Error Response {#err-resp}
 
@@ -359,8 +359,8 @@ The following is a non-normative example Error Response for this case:
   Pragma: no-cache
 
   {
-   "error": "invalid\_request",
-   "error\_description": "Unsupported response\_type value"
+   "error": "invalid_request",
+   "error_description": "Unsupported response_type value"
   }
 ```
   
@@ -369,16 +369,15 @@ The following is a non-normative example Error Response for a Authentication Re
 ```
   HTTP/1.1 302 Found
   Location: https://rp.example.com/cb?
-    error=invalid\_request
-    &error\_description=
-      Unsupported%20response\_type%20value
+    error=invalid_request
+    &error_description=Unsupported%20response_type%20value
 ```
 
 # Authorization Server Metadata
 
 If the authorization server implement the DTP profile, it SHOULD include the following OAuth/OpenID Provider Metadata parameter in discovery responses:
 
-* "digital\_trust\_protocol\_extension" : A boolean field with value _true to inform the RP this OP implement this profile._
+* "digital_trust_protocol_extension" : A boolean field with value _true_ to inform the RP this OP implement this profile.
 
 # Security Considerations {#security-considerations}
 
@@ -388,36 +387,35 @@ For authorizing users in native apps the best practice described in RFC [@!OAuth
 
 ## Client Authentication Methods {#client-auth-methods}
 
-To enhance security implementations MUST only support and allow private\_key\_jwt as Client Authentication method_,_ described in Section 9. of [@!OIDC].
+To enhance security implementations MUST only support and allow private_key_jwt as Client Authentication method, described in Section 9. of [@!OIDC].
 
 The reasons for this specification to do not allow other Client Authentication Methods are:
 
-* _none:_ is not an authentication method so is not allowed. 
+* _none:_ is not an authentication method so is not allowed.
 * _client\_secret\_basic_ and _client\_secret\_post_ send over the network the complete credential that can be intercepted.
-* client\_secret\_jwt is based on a shared secret and is a less secure version of the client\_secret\_jwt.
-* tls\_client\_auth and self\_signed\_tls\_client\_auth described in specification [@!OAuth.MTLS], are discarded because bind Network and Authentication layer.
+* _client\_secret\_jwt_ is based on a shared secret and is a less secure version of the _private\_key\_jwt_.
+* _tls\_client\_auth_ and _self\_signed\_tls\_client\_auth_ described in specification [@!OAuth.MTLS], are discarded because bind Network and Authentication layer.
 
 During Client Registration, the RP (Client) MUST register a Client Authentication method. If no method is registered, the default method is _private\_key\_jwt_.
 
 The supported Client Authentication Methods MAY be expanded if in the future if other method is provided by other implementers that commit with the security level provided by this specification.
 
-The next is a non normative example of a jwt bearer following the specification of private\_key\_jwt method: (line wraps within JWS for display purposes only)
+The next is a non normative example of a jwt bearer following the specification of private_key_jwt method: (line wraps within JWS for display purposes only)
 
 ```
 eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiLTRhYzQtY
 mE0Ni05NzdmYzVmODdkYjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsInN1YiI6IjNkZmQ4OWUxLTk2NGItNGFjN
 C1iYTQ2LTk3N2ZjNWY4N2RiOSIsImlhdCI6MTU3MDAyMjU3NiwibmJmIjoxNTcwMDIyNTc2LCJleHAiOjE1NzAwMjI2MzYsImp0a
-SI6IjcwMzNhMDVlLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N\_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nD
+SI6IjcwMzNhMDVlLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nD
 mglkyyCj3ZJvvxjNE-c6H6wK7mEbL5d1StP1dhK7iARAkDH-7Jm-CxmcnmvbiqINkVjjkzrww3BMfwa87MPXga7C8-5u8VXokbfi
 CflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVDzAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8rto3xB7af5wfTJuvsXII
-C1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTner1U2j77B\_X01\_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
+C1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTner1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
 ```
 
 ## Initiate authorize endpoint phishing 
 In this attack, the RP developer is social engineered into believing that the initiate authorize endpoint has been changed to a URL that is controlled by the attacker. As the result, the client could send sensitive details to a rogue OP and the attacker will get hold of sensitive data.
 
 This can be partially  mitigated by having the RP to enquiry the value of the above endpoint by calling the well known configuration endpoint. Alternatively, JWE could be used when sending requests.
-
 
 ## Token endpoint phishing 
 In this attack, the RP developer is social engineered into believing that the token endpoint has been changed to a URL that is controlled by the attacker. As the result, the client could send an authorization code and a valid credential to a rogue OP. The attacked could then use them to retrieve the token from the honest OP.
@@ -462,22 +460,23 @@ The following is a non-normative example of a response from RP to the customer 
 ```
 HTTP/1.1 302 Found
 Location: https://op.example.com/authorize
-    ?client\_id=3dfd89e1-964b-4ac4-ba46-977fc5f87db9
-	&request\_uri=urn:example:Y7AyOKAK
+    ?client_id=3dfd89e1-964b-4ac4-ba46-977fc5f87db9
+    &request_uri=urn:example:Y7AyOKAK
 ```
 
-Note that since we are using [@!OAuth.PAR] client\_id param can be omitted and used inside the request object.
+Note that since we are using [@!OAuth.PAR] client_id param can be omitted and used inside the request object.
 
 ## Authentication request {#auth-req}
 
 The following is a non-normative example of an authentication request to the /authorize endpoint in OP. This request follow the specification defined inSection 3.1.2.1 of [@!OIDC]
 
-This request is the result of the redirection response [Authorize redirect response](#auth-redirect-resp). As explained in the [Authorize redirect response](#auth-redirect-resp) example client\_id param can be omitted here.
+This request is the result of the redirection response [Authorize redirect response](#auth-redirect-resp). As explained in the [Authorize redirect response](#auth-redirect-resp) example client_id param can be omitted here.
 
 ```
-GET /authorize?
-	&client\_id=3dfd89e1-964b-4ac4-ba46-977fc5f87db9
-	&request\_uri=urn:example:Y7AyOKAK
+GET /authorize
+  ?client_id=3dfd89e1-964b-4ac4-ba46-977fc5f87db9
+  &request_uri=urn:example:Y7AyOKAK
+
 Host: op.example.com
 ```
 
@@ -487,8 +486,8 @@ The following is a non-normative example of a response from OP when the custome
 
 ```
 HTTP/1.1 302 Found
-Location: https://rp.example.com/cb?
-    code=SplxlOBeZQQYbYS6WxSbIA
+Location: https://rp.example.com/cb
+    ?code=SplxlOBeZQQYbYS6WxSbIA
     &state=af0ifjsldkj
 ```
 
@@ -497,9 +496,10 @@ Location: https://rp.example.com/cb?
 The following is a non-normative example of a request to the callback RP endpoint containing the code and state. 
 
 ```
-GET /cb?
-	code=SplxlOBeZQQYbYS6WxSbIA
+GET /cb
+    ?code=SplxlOBeZQQYbYS6WxSbIA
     &state=af0ifjsldkj
+
 Host: rp.example.com
 ```
 
@@ -507,30 +507,30 @@ Host: rp.example.com
 
 The following is a non-normative example of a Token Request following the specification described described in the section 3.1.3.1. of [@!OIDC].
 
-The Client MUST be authenticated to the Token Endpoint using the authentication method registered for its client\_id, as described in Section [Client Authentication Methods](#client-auth-methods).
+The Client MUST be authenticated to the Token Endpoint using the authentication method registered for its client_id, as described in Section [Client Authentication Methods](#client-auth-methods).
 
 ```
 POST /token HTTP/1.1
 Host: op.example.com
 Content-Type: application/x-www-form-urlencoded
- ?grant\_type=authorization\_code
+ ?grant_type=authorization_code
  &code=SplxlOBeZQQYbYS6WxSbIA
- &redirect\_uri=https://rp.example.org/cb
- &client\_assertion\_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
- &client\_assertion=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiL
+ &redirect_uri=https://rp.example.org/cb
+ &client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+ &client_assertion=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiL
 TRhYzQtYmE0Ni05NzdmYzVmODdkYjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsInN1YiI6IjNkZmQ4OWUxLTk2NGItNGFjNC1i
 YTQ2LTk3N2ZjNWY4N2RiOSIsImlhdCI6MTU3MDAyMjU3NiwibmJmIjoxNTcwMDIyNTc2LCJleHAiOjE1NzAwMjI2MzYsImp0aSI6IjcwMzNhMDV
-lLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N\_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nDmglkyyCj3ZJvvxjNE-c6H6wK7
+lLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nDmglkyyCj3ZJvvxjNE-c6H6wK7
 mEbL5d1StP1dhK7iARAkDH-7Jm-CxmcnmvbiqINkVjjkzrww3BMfwa87MPXga7C8-5u8VXokbfiCflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVD
 zAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8rto3xB7af5wfTJuvsXIIC1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTn
-er1U2j77B\_X01\_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
+er1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
 ```
 
 ## Token response {#token-resp}
 
 The following is a non-normative example of a token response following the specifications of described in Section 3.1.3.3. of [@!OIDC].
 
-The id\_token parameter is explained in section [ID token example](#id-token-example) (with line wraps within values for display purposes only)
+The id_token parameter is explained in section [ID token example](#id-token-example) (with line wraps within values for display purposes only)
 
 ```
 HTTP/1.1 200 OK
@@ -539,18 +539,18 @@ HTTP/1.1 200 OK
   Pragma: no-cache
 
   {
-   "access\_token": "SlAV32hkKG",
-   "token\_type": "Bearer",
-   "refresh\_token": "8xLOxBtZp8",
-   "expires\_in": 3600,
-   "id\_token": "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6Im9wX2tleV8xIn0.eyJpc3MiOiJodHRwczovL29wLmV4YW1wbGUub
+   "access_token": "SlAV32hkKG",
+   "token_type": "Bearer",
+   "refresh_token": "8xLOxBtZp8",
+   "expires_in": 3600,
+   "id_token": "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6Im9wX2tleV8xIn0.eyJpc3MiOiJodHRwczovL29wLmV4YW1wbGUub
 3JnLyIsImF1ZCI6Imh0dHBzOi8vcnAuZXhhbXBsZS5jb20iLCJzdWIiOiIxNDI1MzY3NDgiLCJub25jZSI6Im4tMDEwX00xNlUzMSIsImF0X2hhc2
 giOiJ6MGNZbk9OQmM5VGRoZ1JVZGxKM0RPNkFyTDJNLXZfNzBpUGo5bG5BbG5RIiwiZ2l2ZW5fbmFtZSI6IkphbmUiLCJmYW1pbHlfbmFtZSI6IkR
 vZSIsImJpcnRoZGF0ZSI6IjE5OTAtMDEtMzAiLCJjZXJ0aWZpZWRfY2xhaW1zIjp7ImNlcnRpZmllZF9naXZlbl9uYW1lIjp7InZhbHVlIjoiSmFu
 ZSIsImVudGl0eSI6IlNhbnRhbmRlciIsImxvYSI6M30sImNlcnRpZmllZF9mYW1pbHlfbmFtZSI6eyJ2YWx1ZSI6IkRvZSIsImVudGl0eSI6IlNhb
 nRhbmRlciIsImxvYSI6M30sImNlcnRpZmllZF9uYXRpb25hbGl0eSI6eyJ2YWx1ZSI6IkJyaXRpc2giLCJlbnRpdHkiOiJTYW50YW5kZXIiLCJsb2
 EiOjN9LCJjZXJ0aWZpZWRfYmlydGhkYXRlIjp7InZhbHVlIjoiMTk5MC0wMS0zMCIsImVudGl0eSI6IlNhbnRhbmRlciIsImxvYSI6M319LCJpYXQ
-iOjE1NjgzNzk4ODQsImV4cCI6MTU2ODM3OTk0NH0.chwTi-Pt9A7t2O1WvAGQzxNBIoQKbxlDThLa946hgNvtMlbPuIdnMfsbxDBZb-paF0JdEXyhHNQvX9AqqZ7j9rfOJrMYqSawmUJCyjO9IppSuucZ3eVcHPzcSuOCdWQl0GQ8rBtFZJbTbX4SP5oavLLb-hZgC-F86Gt-\_jAE6sT-zXAR9zsQ4IASNjGJHAbpD36NTK6HC4TsOa77b8cJtYKbwqqBqFDcnyi1uwOusbdg\_zI6M5wRpMWIF0LQBiLVnYX-n4gAwWyeGuB4\_7iMLfSvIsL0hzaq7pMsRqikHnIceBSfklaEnWyiRdhf0tPNajIaho6pLKAXdWnrCk7DWw"
+iOjE1NjgzNzk4ODQsImV4cCI6MTU2ODM3OTk0NH0.chwTi-Pt9A7t2O1WvAGQzxNBIoQKbxlDThLa946hgNvtMlbPuIdnMfsbxDBZb-paF0JdEXyhHNQvX9AqqZ7j9rfOJrMYqSawmUJCyjO9IppSuucZ3eVcHPzcSuOCdWQl0GQ8rBtFZJbTbX4SP5oavLLb-hZgC-F86Gt-_jAE6sT-zXAR9zsQ4IASNjGJHAbpD36NTK6HC4TsOa77b8cJtYKbwqqBqFDcnyi1uwOusbdg_zI6M5wRpMWIF0LQBiLVnYX-n4gAwWyeGuB4_7iMLfSvIsL0hzaq7pMsRqikHnIceBSfklaEnWyiRdhf0tPNajIaho6pLKAXdWnrCk7DWw"
   }
 ```
 
@@ -569,22 +569,22 @@ The reason for this two claims is to avoid an attacker in control to the clock o
 {
    "iss": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
    "aud": "https://op.example.com",
-   "response\_type": "code",
-   "client\_id": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
-   "redirect\_uri": "https://rp.example.org/cb",
+   "response_type": "code",
+   "client_id": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
+   "redirect_uri": "https://rp.example.org/cb",
    "scope": "openid",
    "state": "af0ifjsldkj",
-   "nonce": "n-010\_M16U31",
+   "nonce": "n-010_M16U31",
    "claims":
     {
-     "id\_token":
+     "id_token":
       {
-        "given\_name": {"essential": true},
-        "family\_name": {"essential": true},
-        "passport\_number": null,
+        "given_name": {"essential": true},
+        "family_name": {"essential": true},
+        "passport_number": null,
         "nationality": null,
         "birthdate": {"essential": true},
-        "place\_of\_birth": null
+        "place_of_birth": null
       }
     }
 }
@@ -600,8 +600,8 @@ YzQtYmE0Ni05NzdmYzVmODdkYjkiLCJyZWRpcmVjdF91cmkiOiJodHRwczovL3JwLmV4YW1wbGUub3Jn
 ZSI6ImFmMGlmanNsZGtqIiwibm9uY2UiOiJuLTAxMF9NMTZVMzEiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsiZ2l2ZW5fbmFtZSI6eyJlc3NlbnRpYWwi
 OnRydWV9LCJmYW1pbHlfbmFtZSI6eyJlc3NlbnRpYWwiOnRydWV9LCJwYXNzcG9ydF9udW1iZXIiOm51bGwsIm5hdGlvbmFsaXR5IjpudWxsLCJiaXJ0
 aGRhdGUiOnsiZXNzZW50aWFsIjp0cnVlfSwicGxhY2Vfb2ZfYmlydGgiOm51bGx9fSwiaWF0IjoxNTY4NzI0OTQ5LCJuYmYiOjE1Njg3MjQ5NDksImV4
-cCI6MTU2ODcyNTAwOSwianRpIjoiYTMyNGM5YWMtYTQ3Yy00MWE4LWFkM2ItMDY5M2IxODE3ZGM5In0.EojFJ5r\_FgDGcQS9kjKgwgs759DN6MlS9di\_
-LCnwN2le0PFo51fVYKLwupIfnCduY\_i2iPgVuCMlx9UM5WV9FdogDf-r1BoF-cp9FLCCd8x-C9VIXKHTXO5jkQ-6jiOG1X00gK7s9-zL7DGlFjXYy8FKiyB1ByZ3onEI4IFFCnJyq3PuTK6UqIYVOOsQ\_JgkQvtSdRFVF3jQUzT5bcZb8vGhLL8LGRktfa7CtI-6iHkZzRvcyQvB65hT3yUsC7qxA8UHazHN4n8jIh\_vjoMmopMNhFnRzUdEQyuF5l25uJkr5gYbzcrzJPA0byTp4h186muiAxQKWookHSIUNO-ubQ
+cCI6MTU2ODcyNTAwOSwianRpIjoiYTMyNGM5YWMtYTQ3Yy00MWE4LWFkM2ItMDY5M2IxODE3ZGM5In0.EojFJ5r_FgDGcQS9kjKgwgs759DN6MlS9di_
+LCnwN2le0PFo51fVYKLwupIfnCduY_i2iPgVuCMlx9UM5WV9FdogDf-r1BoF-cp9FLCCd8x-C9VIXKHTXO5jkQ-6jiOG1X00gK7s9-zL7DGlFjXYy8FKiyB1ByZ3onEI4IFFCnJyq3PuTK6UqIYVOOsQ_JgkQvtSdRFVF3jQUzT5bcZb8vGhLL8LGRktfa7CtI-6iHkZzRvcyQvB65hT3yUsC7qxA8UHazHN4n8jIh_vjoMmopMNhFnRzUdEQyuF5l25uJkr5gYbzcrzJPA0byTp4h186muiAxQKWookHSIUNO-ubQ
 ```
 
 This JWS can be validated using the [Example Keys](#example-keys)
@@ -615,11 +615,11 @@ The following is a non-normative example of an id token returned by the OP follo
    "iss": "https://op.example.org/",
    "aud": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
    "sub": "142536748",
-   "txn": "V1StGXR8\_Z5jdHi6B-myT",
-   "nonce": "n-010\_M16U31",
-   "at\_hash":"z0cYnONBc9TdhgRUdlJ3DO6ArL2M-v\_70iPj9lnAlnQ",
-   "given\_name": "Jane",
-   "family\_name" : "Doe",
+   "txn": "V1StGXR8_Z5jdHi6B-myT",
+   "nonce": "n-010_M16U31",
+   "at_hash":"z0cYnONBc9TdhgRUdlJ3DO6ArL2M-v_70iPj9lnAlnQ",
+   "given_name": "Jane",
+   "family_name" : "Doe",
    "birthdate": "1990-01-30"
 }
 ```
@@ -635,9 +635,9 @@ dmVuX25hbWUiOnsidmFsdWUiOiJKYW5lIiwiZW50aXR5IjoiU2FudGFuZGVyIiwibG9hIjozfSwiY2Vy
 p7InZhbHVlIjoiRG9lIiwiZW50aXR5IjoiU2FudGFuZGVyIiwibG9hIjozfSwiY2VydGlmaWVkX25hdGlvbmFsaXR5Ijp7InZhbHVlIjoi
 QnJpdGlzaCIsImVudGl0eSI6IlNhbnRhbmRlciIsImxvYSI6M30sImNlcnRpZmllZF9iaXJ0aGRhdGUiOnsidmFsdWUiOiIxOTkwLTAxLT
 MwIiwiZW50aXR5IjoiU2FudGFuZGVyIiwibG9hIjozfX0sImlhdCI6MTU2ODc5NTI4NywibmJmIjoxNTY4Nzk1Mjg3LCJleHAiOjE1Njg3
-OTUzNDcsImp0aSI6ImY5MTdkMDcxLTE4NDItNGRkOC1iODZmLTJhN2YwNDIzYzdhMiJ9.d2GDd1Qm\_xnb9-Vg12oE3xzgp\_Qn4hTEM-gcZ
-EL5kohM44E5JKZbSpgmnKAQMn-fYDl1y5kExaNbruzzu2F2Rsk976YJxKd\_R8Wg67FhMFqbOGn71vGRGxT47LhXdCVy1\_H0ptoJ8K8hJW3
-3HOrMHoaSQjoKcoBrkzlJSmqAB60zVKo3nGnEhzz8osnWOP9xoRsc0zeM\_On9iFhPpELjm-iLUy0tW9u7sGqQOpJLhKfh\_721m\_i4G1n9lDnQCs9qnjTbJ0ESV4lxLVAZ2ACoWtnCbtvvGEgtMiQMwCd8\_RdVvNZIKGbXTinA20x7FXvK
+OTUzNDcsImp0aSI6ImY5MTdkMDcxLTE4NDItNGRkOC1iODZmLTJhN2YwNDIzYzdhMiJ9.d2GDd1Qm_xnb9-Vg12oE3xzgp_Qn4hTEM-gcZ
+EL5kohM44E5JKZbSpgmnKAQMn-fYDl1y5kExaNbruzzu2F2Rsk976YJxKd_R8Wg67FhMFqbOGn71vGRGxT47LhXdCVy1_H0ptoJ8K8hJW3
+3HOrMHoaSQjoKcoBrkzlJSmqAB60zVKo3nGnEhzz8osnWOP9xoRsc0zeM_On9iFhPpELjm-iLUy0tW9u7sGqQOpJLhKfh_721m_i4G1n9lDnQCs9qnjTbJ0ESV4lxLVAZ2ACoWtnCbtvvGEgtMiQMwCd8_RdVvNZIKGbXTinA20x7FXvK
 3AttXH901JkMzwRiG-RUPQ
 ```
 
@@ -647,7 +647,7 @@ The next keys are just for illustrative purposes, should only be used to generat
 
 All the sample jws showed in this page have been signed using these keys using the same for RP and OP jwts, in a real implementation each actor in the protocol has his own key pairs.
 
-### Public KEY {#public-key}
+### Public KEY {#public-key}
 
 ```
 \-----BEGIN CERTIFICATE-----
@@ -905,7 +905,7 @@ TBD...
 
 *   txn: review if already exist.
 *   errors: response parameter in PAR.
-*   digital\_trust\_protocol\_extension: for metadata.
+*   digital_trust_protocol_extension: for metadata.
 
 # Notices
 
