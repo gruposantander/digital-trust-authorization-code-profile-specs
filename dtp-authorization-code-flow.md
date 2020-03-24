@@ -289,14 +289,14 @@ Each array object contain the next fields:
 
 The Initiate Authorization Endpoint has some restrictions or add ons to the original specification described in [@!OAuth.PAR].
 
-* The endpoint recommended name is /initiate-authorize.
-* OP SHALL require the use of a request object sent in the request parameter.
-* OP SHALL support only signed JWT request objects, this means OP SHALL REQUIRE request parameter.
-* OP SHALL ONLY allow _response\_type_ with value code.
-* OP SHALL only support the client authentication methods described in Section [Client Authentication Methods](#client-auth-methods).
-* OP MAY NOT implement the error validation described in Section "2.3.1.5. Request entity too large" of [@!OAuth.PAR].
-* OP SHALL REQUIRE scope param contain value _openid._
-* OP MAY return the _errors_ field in the Successful Initiate Authorization Response to help RP.
+1. The endpoint recommended name is /initiate-authorize.
+2. OP SHALL require the use of a request object sent in the request parameter.
+3. OP SHALL support only signed JWT request objects, this means OP SHALL REQUIRE request parameter.
+4. OP SHALL ONLY allow _response\_type_ with value code.
+5. OP SHALL only support the client authentication methods described in Section [Client Authentication Methods](#client-auth-methods).
+6. OP MAY NOT implement the error validation described in Section "2.3.1.5. Request entity too large" of [@!OAuth.PAR].
+7. OP SHALL REQUIRE scope param contain value _openid._
+8. OP MAY return the _errors_ field in the Successful Initiate Authorization Response to help RP.
 
 # txn Claim
 
