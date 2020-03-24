@@ -308,12 +308,14 @@ The `txn` value MUST allow an RP to obtain these transaction details if needed.
 
 Note: The mechanism to obtain the transaction details from the OP and their format is out of scope of this specification.
 
-# OpenId Restrictions and Extensions
+# OpenID Restrictions and Extensions
 
-Client (aka RP) specification statements:
+## Client (aka RP)
+
+A client specification statements are:
 
 1. MAY support mutual TLS connections.
-2. if mutual TLS is not possible, client SHALL communicate with the Authorization Server using TLS. See Section 16.17 of [@!OIDC] for more information on using TLS. 
+2. if mutual TLS is not possible, client SHALL communicate with the Authorization Server using TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
 3. SHALL authenticate when making requests to the Authentication Server at the token and initiate-authorize endpoint, as described in Section [Client Authentication Methods](#client-auth-methods).
 4. SHALL include the _request\_uri_ parameter as defined in Section 6 of [@!OIDC] in the authentication request;
 5. SHALL additionally send duplicates of the parameters/values using the OAuth 2.0 request syntax where required by the OAuth specification.
@@ -328,7 +330,9 @@ Client (aka RP) specification statements:
 14. SHALL include _openid_ value as scope in all authorization request.
 15. SHALL use the PCKE as described in [@!OAuth.NativeApps] for native apps clients.
 
-Authentication server (aka OP) specification statements:
+## Authentication server (aka OP)
+
+The authorization server specification statements are:
 
 1. SHALL NOT support public clients.
 2. MAY support mutual TLS connections.
