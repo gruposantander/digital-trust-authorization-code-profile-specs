@@ -49,21 +49,21 @@ organization="Santander Technology"
 
 .# Abstract
 
-This document defines the Digital Trust Protocol authorization code flow, which allows End-Users share verified information with Clients in a secure way using OIDC and OAuth 2.0 protocols.
+This document defines the Digital Trust Protocol authorization code flow, which allows End-Users to share verified information with Clients in a secure way using OIDC and OAuth 2.0 protocols.
 
 {mainmatter}
 
 # Introduction {#Introduction}
 
-Privacy is one of the most important things of our lives, thanks to the grown of online services we have improved our day to day, but we are losing our privacy, while services are relying in non trusted data that allows the creation of fake identities in the internet.
+Privacy is one of the most important things in our lives and thanks to the growth of online services, we have began to lose direct control of our own data. Many services rely on data from untrusted sources, leading to the creation and usage of fake identities online.
 
 Most of the services require private information that is introduced by the user, making users spread the same details around the different service providers while not allowing these service providers to verify the information filled by customers. We believe that this is inefficient for both parties.
 
-We want to define a way that will help customers to share the minimum required level of details while allow services to get rich and trusted information from the customer, preserving and avoiding the risk of storing sensitive information.
+We want to define a way that will help customers to share the minimum required level of details whilst allowing services to get rich and trusted information. Taking advantage of the assertion claims proccess will give third parties the option of not having to handle sensitive data storage.
 
-OIDC provides a mechanism to verify identity of the End-User based on authentication performed by an Auth Server and get Basic profile information. We would like to use this mechanism in order to provide certified information by a secure communication protocol, to achieve this we will use OpenId as base.
+OIDC provides a mechanism to verify the identity of the End-User based on authentication performed by an Auth Server and retrieval of Basic profile information. We would like to use this mechanism in order to provide certified information via a secure communication protocol, therefore, we chose OpenId as base.
 
-The specification depicted in this document covers only the security profile for Digital Trust Protocol, other extensions will also complement the full protocol specifications.
+The specification depicted in this document covers only the security profile for Digital Trust Protocol. Any other extensions will also complement the full protocol specifications.
 
 ## Notational conventions
 
@@ -80,7 +80,7 @@ OpenID
 
 # DTP Authorization Code flow
 
-This section describes how to perform a customer information share using the Authorization Code Flow, this flow is based on "Authentication using the Authorization Code Flow" Section 3.1 of [@!OIDC] specification with some add ons and changes to fulfil our requirements, with customer privacy control and security best practices.
+This section describes how to perform a customer information share using the Authorization Code Flow, this flow is based on the "Authentication using the Authorization Code Flow" Section 3.1 of [@!OIDC] specification. We have made some add ons and changes to fulfil our requirements, with focus on customer privacy control and security best practices.
 
 ## Authorization Code Flow Steps
 
@@ -91,41 +91,41 @@ These steps of the flow are illustrated in the following diagram:
 
 [Diagram Source Here](http://www.plantuml.com/plantuml/uml/XLFHRjiw37ttL_0n1b8aj_Tbo9QXGHPi7OhPQBBrCL0bDXPgIvb4T-s-nj_YBnlbHe6zP9kV3F6SG_AGlF8a7DLLcNWfIeHAFCERwHH-Q4L58YHP1ylQawtG9SdAaAONkCsFlrcUy3UVynlSuRtNX9F5VW_pUPBmqyNx8tisY0l_gCqE7bXU2H994c5COQqPoC9QZv0x-wGLkfZZ5h_Nw2dglsDqnkYL9t5VQbz0LLCjIjZSh6C176-RjicpzGOcscZIWl12r5HOftyYZ6IfqH18XmeDHqi_1dV8y_bkdIP9bhVD8TCtKMh50h1W0LXsrBE0A74-k9PsZnxi0r1nXC98UAY4OOHrBoai2vIFeMifJCG4l4TGI4ANVY2-TDZBkwsTXj7Nsoyfi29ubiJGJg2mBMqJNFwqsUHmEVslJngt3JxljKE_rQRp_JYRXPIu9n-dS7RA_qyluSPAGTgQ6KoEFh-DHb-hSJzTEfnzblT9V-PaUKHdzoIqwKyCQi_BrIT4_606hzAQfNsOHiYWj4CPNUWfjaslojUbWrct0a511hNHZTrfavxWPWVNG5hZ6GqJM6F9MK0RNl-gCmh8WY-4mmaib88FWiHnzVkrTrECIXpuc_V3TfWg2CVCLGYZQ727l0XlwUa9VbnjO03S1k11AGm-0jlcANhQnUAnRkmZ6hWsX4uMmkpmjxDjct_SBRmUBGMTitTwjhvXtpid3BtiSNOA7Lxsqvd3ZHrgjJqK4TRBEjw9LJfc7wL4xoSE7npw8askqAYwAdy1)
 
-The Authorization Code Flow goes through the following steps: (separated in groups as in the flow diagram)
+The Authorization Code Flow follows the steps outlined below: (separated in groups as in the flow diagram)
 
 ### RP website/APP Flow Steps
 
-This is the start of the process, can be initiated and presented to the customer in many different ways but common steps are:
+The start of the process can be initiated and presented to the customer in different ways, but common steps are:
 
-1. Customer is navigating in a RP website or using an RP app.
+1. Customer is going through a journey in an RP website or app.
 2. RP website/app asks for a certified data to the customer and offers the different providers that are integrated in the RP implementation.
-3. Customer selects a provider to provide the requested information.
+3. Customer selects a provider to retrieve the requested information.
 
 ### RP Request Flow Steps
 
 Once the RP gets the provider selected by the customer the steps to initiate the information interchange are:
 
-1. It is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
-2. RP sends the request to the Initiate Authorization endpoint in OP to initiate the process, the auhtorization data is sent inside a request object as described in section [Initiate Authorization Request](#initi-auth-req) of this specification.
-3. OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC], additionally MUST validate the `request` JWS following Section 6.3. of [@!OIDC] specification.
-4. If validations are correct the OP MUST store the JWS and generate a `request_uri` that identify where is located. As described in [@!OAuth.PAR] specification.
+1. It is RECOMMENDED that RP and OP establish a mutual TLS connection. If a mutual TLS connection is not possible, then communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
+2. RP sends the request to the Initiate Authorization endpoint in the OP to initiate the process and the authorization data is sent inside a request object as described in section [Initiate Authorization Request](#initi-auth-req) of this specification.
+3. OP MUST validate that the client is correctly authenticated and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC]. Additionally the OP MUST validate the `request` JWS following Section 6.3. of [@!OIDC] specification.
+4. If validations are correct, the OP MUST store the JWS and generate a `request_uri` that identifies where it is located. This is as described in the [@!OAuth.PAR] specification.
 5. OP will return to the RP a response with the format described in section [Successful Initiate Authorization Response](#succ-init-auth-resp) of this specification.
-6. In case of any error OP will return an error response as described in section [Initiate Authorization Error Response](#err-init-auth-resp) of this specification.
+6. In case of any error, the OP will return an error response as described in section [Initiate Authorization Error Response](#err-init-auth-resp) of this specification.
 
 ### Customer Accepts Request Flow Steps
 
-Once the OP has validated the request JWS from RP, the user authentication and consent flow continues as follow:
+Once the OP has validated the request JWS from the RP, the user authentication and consent flow continues as follows:
 
-1. RP responds to the user with a HTTP 302 redirect response as described in Section 3.1.2.1 of [@!OIDC], containing in Location header the url with the needed params to make an authentication Request to OP. An example of this response can be found in [Authorize redirect response](#auth-redirect-resp)
-2. The customer User Agent follows the redirection and make an Authentication Request to the Authorization Endpoint in OP. Example of the request: [Authentication request](#auth-req).
-3. OP MUST obtain the request JWS from storage using the `request_uri` parameter, OP MUST check that `request_uri` is still valid and not expired.
-4. OP then MUST validate the request as described in Section 3.1.2.2. of [@!OIDC], OP MUST be aware that even if the `request_uri` parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
-5. If the request is valid, the OP attempts to Authenticate the End-User or determines whether the End-User is Authenticated, the way to authenticate the user (user, password, 2FA, cookies... ) is out of the scope of this specification. The normal approach is to present the user one or more pages (steps auth) to authenticate the user. More details in Section 3.1.2.3. of [@!OIDC].
-6. Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End-user to take a decision, in this case please follow the security recommendations described in section [Security Considetarions](#security-considerations). The customer then accepts or selects information to share with the RP.
-7. Once customer consents the request, OP will store the consent information (which claims has been consented) and generates an authorization code.
-8. OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the `redirect_uri` and as query parameter the generated `code`, as described in Section 3.1.2.5. of [@!OIDC]. Example of the response: [Successful Authorize response](#succ-auth-resp).
-9. In case of any error OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.2.6 of [@!OIDC].
-10. The customer User Agent follows the redirection and makes a request to the RP callback uri, providing the authorization code in the query string, example of the request: [Callback RP request](#callback-req).
+1. RP responds to the user with a HTTP 302 redirect response as described in Section 3.1.2.1 of [@!OIDC]. Contained in the Location header, is the url with the needed params to make an authentication Request to the OP. An example of this response can be found in [Authorize redirect response](#auth-redirect-resp)
+2. The customer User Agent follows the redirection and makes a new Authentication Request to the Authorization Endpoint in the OP. Example of the request: [Authentication request](#auth-req).
+3. OP MUST obtain the request JWS from storage using the `request_uri` parameter. OP MUST check that `request_uri` is still valid and has not expired.
+4. OP MUST then validate the request as described in Section 3.1.2.2. of [@!OIDC]. OP MUST be aware that even if the `request_uri` parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax. This occurs when the parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
+5. If the request is valid, the OP attempts to Authenticate the End-User or determine whether the End-User is Authenticated. The way to authenticate the user (user, password, 2FA, cookies... ) is out of the scope of this specification. The normal approach is to present the user one or more pages (steps auth) to allow them to authenticate. More details in Section 3.1.2.3. of [@!OIDC].
+6. Once the customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP. The RP MAY show the data that is going to be shared in order to help the End-user to take a decision and in this case, please follow the security recommendations described in section [Security Considetarions](#security-considerations). The customer then accepts or selects information to share with the RP.
+7. Once customer gives their consent to the request, the OP will store the information (which of the claims have been consented) and generate an authorization code.
+8. OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the `redirect_uri` and the generated `code` passed as a query parameter, as described in Section 3.1.2.5. of [@!OIDC]. Example of the response: [Successful Authorize response](#succ-auth-resp).
+9. In case of any error, the OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.2.6 of [@!OIDC].
+10. The customer User Agent follows the redirection and makes a request to the RP callback uri, providing the authorization code in the query string. An example of the request is: [Callback RP request](#callback-req).
 11. RP MUST validate the authorization response following Section 3.1.2.7. of [@!OIDC] specification.
 
 ### RP Token Interchange Flow Steps
