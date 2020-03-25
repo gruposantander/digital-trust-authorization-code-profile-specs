@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Digital Trust Protocol Authorization Code Flow</title>
+<meta content="Alberto Pulido Moyano" name="author">
+<meta content="Victor Herraiz Posada" name="author">
+<meta content="Miguel Revesado" name="author">
+<meta content="Jorge Oliva Fernandez" name="author">
+<meta content="Davide Bianchini" name="author">
+<meta content="
+       This document defines the Digital Trust Protocol authorization code flow, which allows End-Users share verified information with Clients in a secure way using OIDC and OAuth 2.0 protocols. 
+    " name="description">
+<meta content="xml2rfc 2.40.1" name="generator">
+<meta content="security" name="keyword">
+<meta content="openid" name="keyword">
+<meta content="authorization" name="keyword">
+<meta content="trust" name="keyword">
+<meta content="dtp-auth-code-00" name="ietf.draft">
+<link href="dist/dtp-auth-code-00.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necssary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre, code {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre, code {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+pre.sourcecode,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact informatio look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Avoid wrapping of URLs in references */
+@media screen {
+  .references a {
+    white-space: nowrap;
+  }
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin: 0 0 0.25em 0;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/*
+  The margin-left: 0 on <dd> removes all distinction
+  between levels from nested <dl>s.  Undo that.
+*/
+dl.olPercent > dd,
+dd {
+  margin-left: revert;
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background sligthtly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">dtp-auth-code</td>
+<td class="right">March 2020</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Pulido, et al.</td>
+<td class="center">Expires 20 September 2020</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">connect</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">dtp-auth-code-00</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2020-03-19" class="published">19 March 2020</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2020-09-20">20 September 2020</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">A. Pulido</div>
+<div class="org">Santander Technology</div>
+</div>
+<div class="author">
+      <div class="author-name">V. Herraiz</div>
+<div class="org">Santander Technology</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Herrero</div>
+<div class="org">Santander Technology</div>
+</div>
+<div class="author">
+      <div class="author-name">J. Oliva, Ed.</div>
+<div class="org">Santander Technology</div>
+</div>
+<div class="author">
+      <div class="author-name">D. Bianchini</div>
+<div class="org">Santander Technology</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Digital Trust Protocol Authorization Code Flow</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document defines the Digital Trust Protocol authorization code flow, which allows End-Users share verified information with Clients in a secure way using OIDC and OAuth 2.0 protocols.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 20 September 2020.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2020 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Simplified BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a><a href="#section-toc.1-1.1.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-notational-conventions" class="xref">Notational conventions</a><a href="#section-toc.1-1.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1"><a href="#section-1.2" class="xref">1.2</a>.  <a href="#name-terminology" class="xref">Terminology</a><a href="#section-toc.1-1.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="xref">2</a>.  <a href="#name-dtp-authorization-code-flow" class="xref">DTP Authorization Code flow</a><a href="#section-toc.1-1.2.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.2.2.1">
+                <p id="section-toc.1-1.2.2.1.1"><a href="#section-2.1" class="xref">2.1</a>.  <a href="#name-authorization-code-flow-ste" class="xref">Authorization Code Flow Steps</a><a href="#section-toc.1-1.2.2.1.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.2.2.1.2.1">
+                    <p id="section-toc.1-1.2.2.1.2.1.1"><a href="#section-2.1.1" class="xref">2.1.1</a>.  <a href="#name-rp-website-app-flow-steps" class="xref">RP website/APP Flow Steps</a><a href="#section-toc.1-1.2.2.1.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.2.2.1.2.2">
+                    <p id="section-toc.1-1.2.2.1.2.2.1"><a href="#section-2.1.2" class="xref">2.1.2</a>.  <a href="#name-rp-request-flow-steps" class="xref">RP Request Flow Steps</a><a href="#section-toc.1-1.2.2.1.2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.2.2.1.2.3">
+                    <p id="section-toc.1-1.2.2.1.2.3.1"><a href="#section-2.1.3" class="xref">2.1.3</a>.  <a href="#name-customer-accepts-request-fl" class="xref">Customer Accepts Request Flow Steps</a><a href="#section-toc.1-1.2.2.1.2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.2.2.1.2.4">
+                    <p id="section-toc.1-1.2.2.1.2.4.1"><a href="#section-2.1.4" class="xref">2.1.4</a>.  <a href="#name-rp-token-interchange-flow-s" class="xref">RP Token Interchange Flow Steps</a><a href="#section-toc.1-1.2.2.1.2.4.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-initiate-authorization-endp" class="xref">Initiate Authorization Endpoint</a><a href="#section-toc.1-1.3.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="xref">3.1</a>.  <a href="#name-initiate-authorization-requ" class="xref">Initiate Authorization Request</a><a href="#section-toc.1-1.3.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="xref">3.2</a>.  <a href="#name-initiate-authorization-reque" class="xref">Initiate Authorization Request Validation</a><a href="#section-toc.1-1.3.2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="xref">3.3</a>.  <a href="#name-successful-initiate-authori" class="xref">Successful Initiate Authorization Response</a><a href="#section-toc.1-1.3.2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="xref">3.4</a>.  <a href="#name-initiate-authorization-erro" class="xref">Initiate Authorization Error Response</a><a href="#section-toc.1-1.3.2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.5">
+                <p id="section-toc.1-1.3.2.5.1"><a href="#section-3.5" class="xref">3.5</a>.  <a href="#name-initiate-authorization-resp" class="xref">Initiate Authorization Response Validation</a><a href="#section-toc.1-1.3.2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.6">
+                <p id="section-toc.1-1.3.2.6.1"><a href="#section-3.6" class="xref">3.6</a>.  <a href="#name-errors-member-in-successful" class="xref"><em>errors</em> member in Successful Initiate Authorization Response</a><a href="#section-toc.1-1.3.2.6.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.3.2.7">
+                <p id="section-toc.1-1.3.2.7.1"><a href="#section-3.7" class="xref">3.7</a>.  <a href="#name-par-restrictions-and-extens" class="xref">PAR Restrictions and Extension</a><a href="#section-toc.1-1.3.2.7.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-txn-claim" class="xref">txn Claim</a><a href="#section-toc.1-1.4.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-openid-restrictions-and-ext" class="xref">OpenID Restrictions and Extensions</a><a href="#section-toc.1-1.5.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-client-aka-rp" class="xref">Client (aka RP)`</a><a href="#section-toc.1-1.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-authentication-server-aka-o" class="xref">Authentication server (aka OP)</a><a href="#section-toc.1-1.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-error-response" class="xref">Error Response</a><a href="#section-toc.1-1.6.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-authorization-server-metada" class="xref">Authorization Server Metadata</a><a href="#section-toc.1-1.7.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a><a href="#section-toc.1-1.8.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="xref">8.1</a>.  <a href="#name-native-apps" class="xref">Native Apps</a><a href="#section-toc.1-1.8.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="xref">8.2</a>.  <a href="#name-client-authentication-metho" class="xref">Client Authentication Methods</a><a href="#section-toc.1-1.8.2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="xref">8.3</a>.  <a href="#name-initiate-authorize-endpoint" class="xref">Initiate authorize endpoint phishing</a><a href="#section-toc.1-1.8.2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="xref">8.4</a>.  <a href="#name-token-endpoint-phishing" class="xref">Token endpoint phishing</a><a href="#section-toc.1-1.8.2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="xref">8.5</a>.  <a href="#name-cryptographic-consideration" class="xref">Cryptographic Considerations</a><a href="#section-toc.1-1.8.2.5.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.5.2.1">
+                    <p id="section-toc.1-1.8.2.5.2.1.1"><a href="#section-8.5.1" class="xref">8.5.1</a>.  <a href="#name-tls-considerations" class="xref">TLS considerations</a><a href="#section-toc.1-1.8.2.5.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.8.2.5.2.2">
+                    <p id="section-toc.1-1.8.2.5.2.2.1"><a href="#section-8.5.2" class="xref">8.5.2</a>.  <a href="#name-jws-signing-algorithms-cons" class="xref">JWS signing algorithms considerations</a><a href="#section-toc.1-1.8.2.5.2.2.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-data-examples" class="xref">Data Examples</a><a href="#section-toc.1-1.9.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="xref">9.1</a>.  <a href="#name-authorize-redirect-response" class="xref">Authorize redirect response</a><a href="#section-toc.1-1.9.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="xref">9.2</a>.  <a href="#name-authentication-request" class="xref">Authentication request</a><a href="#section-toc.1-1.9.2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="xref">9.3</a>.  <a href="#name-successful-authorize-respon" class="xref">Successful Authorize response</a><a href="#section-toc.1-1.9.2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.4">
+                <p id="section-toc.1-1.9.2.4.1"><a href="#section-9.4" class="xref">9.4</a>.  <a href="#name-callback-rp-request" class="xref">Callback RP request</a><a href="#section-toc.1-1.9.2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.5">
+                <p id="section-toc.1-1.9.2.5.1"><a href="#section-9.5" class="xref">9.5</a>.  <a href="#name-token-request" class="xref">Token request</a><a href="#section-toc.1-1.9.2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.6">
+                <p id="section-toc.1-1.9.2.6.1"><a href="#section-9.6" class="xref">9.6</a>.  <a href="#name-token-response" class="xref">Token response</a><a href="#section-toc.1-1.9.2.6.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.7">
+                <p id="section-toc.1-1.9.2.7.1"><a href="#section-9.7" class="xref">9.7</a>.  <a href="#name-jws-request-object" class="xref">JWS request object</a><a href="#section-toc.1-1.9.2.7.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.8">
+                <p id="section-toc.1-1.9.2.8.1"><a href="#section-9.8" class="xref">9.8</a>.  <a href="#name-id-token-example" class="xref">ID token example</a><a href="#section-toc.1-1.9.2.8.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.9">
+                <p id="section-toc.1-1.9.2.9.1"><a href="#section-9.9" class="xref">9.9</a>.  <a href="#name-example-keys" class="xref">Example Keys</a><a href="#section-toc.1-1.9.2.9.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.9.2.1">
+                    <p id="section-toc.1-1.9.2.9.2.1.1"><a href="#section-9.9.1" class="xref">9.9.1</a>.  <a href="#name-public-key" class="xref">Public KEY</a><a href="#section-toc.1-1.9.2.9.2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.9.2.9.2.2">
+                    <p id="section-toc.1-1.9.2.9.2.2.1"><a href="#section-9.9.2" class="xref">9.9.2</a>.  <a href="#name-private-key" class="xref">Private KEY</a><a href="#section-toc.1-1.9.2.9.2.2.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-acknowledgements" class="xref">Acknowledgements</a><a href="#section-toc.1-1.10.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-normative-references" class="xref">Normative References</a><a href="#section-toc.1-1.11.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-appendix.a" class="xref">Appendix A</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a><a href="#section-toc.1-1.12.1" class="pilcrow">¶</a></p>
+<ul class="toc ulEmpty">
+<li class="toc ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-a.1" class="xref">A.1</a>.  <a href="#name-registry-contents" class="xref">Registry Contents</a><a href="#section-toc.1-1.12.2.1.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-appendix.b" class="xref">Appendix B</a>.  <a href="#name-notices" class="xref">Notices</a><a href="#section-toc.1-1.13.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#section-appendix.c" class="xref">Appendix C</a>.  <a href="#name-document-history" class="xref">Document History</a><a href="#section-toc.1-1.14.1" class="pilcrow">¶</a></p>
+</li>
+<li class="toc ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#section-appendix.d" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a><a href="#section-toc.1-1.15.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</nav>
+</section>
+</div>
+<div id="Introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Privacy is one of the most important things of our lives, thanks to the grown of online services we have improved our day to day, but we are losing our privacy, while services are relying in non trusted data that allows the creation of fake identities in the internet.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Most of the services require private information that is introduced by the user, making users spread the same details around the different service providers while not allowing these service providers to verify the information filled by customers. We believe that this is inefficient for both parties.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">We want to define a way that will help customers to share the minimum required level of details while allow services to get rich and trusted information from the customer, preserving and avoiding the risk of storing sensitive information.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">OIDC provides a mechanism to verify identity of the End-User based on authentication performed by an Auth Server and get Basic profile information. We would like to use this mechanism in order to provide certified information by a secure communication protocol, to achieve this we will use OpenId as base.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The specification depicted in this document covers only the security profile for Digital Trust Protocol, other extensions will also complement the full protocol specifications.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<div id="notational-conventions">
+<section id="section-1.1">
+        <h3 id="name-notational-conventions">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-notational-conventions" class="section-name selfRef">Notational conventions</a>
+        </h3>
+<p id="section-1.1-1">The key words "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "MAY", and "CAN" in this document are to be interpreted as described in "Key words for use in RFCs to Indicate Requirement Levels" <span>[<a href="#RFC2119" class="xref">RFC2119</a>]</span>. These key words are not used as dictionary terms such that any occurrence of them shall be interpreted as key words and are not to be interpreted with their natural language meanings<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-1.2">
+        <h3 id="name-terminology">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.2-1">This specification uses the terms "Access Token", "Authorization Code", "Authorization Endpoint", "Authorization Grant", "Authorization Server", "Client", "Client Authentication", "Client Identifier", "Client Secret", "Grant Type", "Protected Resource", "Redirection URI", "Refresh Token",  "Response Type", and "Token Endpoint" defined by <span>[<a href="#OAuth2.0" class="xref">OAuth2.0</a>]</span>, the terms "Claim Name", "Claim Value" and "JSON Web Token (JWT)" defined by <span>[<a href="#JWT" class="xref">JWT</a>]</span>, the terms "Header Parameter", "JOSE Header" and "JSON Web Signature (JWS)" defined by <span>[<a href="#JWS" class="xref">JWS</a>]</span>, the term "User Agent" defined by <span>[<a href="#RFC2616" class="xref">RFC2616</a>]</span>, and the term "Response Mode" defined by <span>[<a href="#OAuth.Multiple.Responses" class="xref">OAuth.Multiple.Responses</a>]</span>, and terms "Authentication", "Authentication Request", "Authorization Request", "Claim", "Claim Type", "Claims Provider", "Credential", "End-User", "Entity", "ID Token", "Identifier", "Identity", "Issuer", "OpenID Provider (OP)", "Request Object", "Request URI", "Relying Party (RP)", "UserInfo Endpoint", "Validation", "Verification" defined by OpenID Connect <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">This specification also use to the following terms:<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<dl class="dlParallel" id="section-1.2-3">
+          <dt id="section-1.2-3.1">OpenID</dt>
+<dd id="section-1.2-3.2">
+            <p id="section-1.2-3.2.1">References to "openid" in this documentation are about OpenID connect specification <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-1.2-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="dtp-authorization-code-flow">
+<section id="section-2">
+      <h2 id="name-dtp-authorization-code-flow">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-dtp-authorization-code-flow" class="section-name selfRef">DTP Authorization Code flow</a>
+      </h2>
+<p id="section-2-1">This section describes how to perform a customer information share using the Authorization Code Flow, this flow is based on "Authentication using the Authorization Code Flow" Section 3.1 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> specification with some add ons and changes to fulfil our requirements, with customer privacy control and security best practices.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<div id="authorization-code-flow-steps">
+<section id="section-2.1">
+        <h3 id="name-authorization-code-flow-ste">
+<a href="#section-2.1" class="section-number selfRef">2.1. </a><a href="#name-authorization-code-flow-ste" class="section-name selfRef">Authorization Code Flow Steps</a>
+        </h3>
+<p id="section-2.1-1">These steps of the flow are illustrated in the following diagram:<a href="#section-2.1-1" class="pilcrow">¶</a></p>
+<figure id="figure-1">
+          <div class="artwork art-svg alignLeft" id="section-2.1-2.1">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="602.482px" preserveAspectRatio="none" version="1.1" viewBox="0 0 807 602" width="807.838px">
+              <defs></defs>
+              <g>
+                <line x1="23.514" x2="23.514" y1="45.0931" y2="556.9603" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="191.2476" x2="191.2476" y1="45.0931" y2="556.9603" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="517.8315" x2="517.8315" y1="45.0931" y2="556.9603" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="4.1803" y="43.3678">Customer</text>
+                <ellipse cx="23.514" cy="6.7929" fill="white" rx="4.1803" ry="4.1803" stroke="black" stroke-width="1.0450685826257349"></ellipse>
+                <path d="M23.514,10.9732 L23.514,25.0816 M16.7211,15.1535 L30.307,15.1535 M23.514,25.0816 L16.7211,32.9197 M23.514,25.0816 L30.307,32.9197 " fill="none" stroke="black" stroke-width="1.0450685826257349"></path>
+                <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="4.1803" y="563.2282">Customer</text>
+                <ellipse cx="23.514" cy="570.1788" fill="white" rx="4.1803" ry="4.1803" stroke="black" stroke-width="1.0450685826257349"></ellipse>
+                <path d="M23.514,574.3591 L23.514,588.4675 M16.7211,578.5394 L30.307,578.5394 M23.514,588.4675 L16.7211,596.3055 M23.514,588.4675 L30.307,596.3055 " fill="none" stroke="black" stroke-width="1.0450685826257349"></path>
+                <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="184.7159" y="43.3678">RP</text>
+                <ellipse cx="191.2476" cy="28.2169" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"></ellipse>
+                <line x1="184.9771" x2="197.518" y1="35.5323" y2="35.5323" stroke="black" stroke-width="1.0450685826257349"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="184.7159" y="563.2282">RP</text>
+                <ellipse cx="191.2476" cy="573.314" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"></ellipse>
+                <line x1="184.9771" x2="197.518" y1="580.6295" y2="580.6295" stroke="black" stroke-width="1.0450685826257349"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="511.0385" y="43.3678">OP</text>
+                <ellipse cx="517.8315" cy="28.2169" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"></ellipse>
+                <line x1="511.5611" x2="524.1019" y1="35.5323" y2="35.5323" stroke="black" stroke-width="1.0450685826257349"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="7.3155" x="511.0385" y="563.2282">OP</text>
+                <ellipse cx="517.8315" cy="573.314" fill="white" rx="6.2704" ry="6.2704" stroke="black" stroke-width="1.0450685826257349"></ellipse>
+                <line x1="511.5611" x2="524.1019" y1="580.6295" y2="580.6295" stroke="black" stroke-width="1.0450685826257349"></line>
+                <rect fill="white" height="1.5676" width="800" x="1.5676" y="61.0651" stroke="white" stroke-width="0.5225342913128674"></rect>
+                <line x1="1.5676" x2="801.5676" y1="61.0651" y2="61.0651" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <line x1="1.5676" x2="801.5676" y1="62.6327" y2="62.6327" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <rect fill="white" height="12.0877" width="72.6323" x="365.2515" y="55.5438" stroke="#000000" stroke-width="1.0450685826257349"></rect>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="368.3867" y="63.9393">RP Website/App</text>
+                <polygon fill="black" points="29.2619,81.8093,24.0366,83.8994,29.2619,85.9895,27.1718,83.8994" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="26.1267" x2="190.725" y1="83.8994" y2="83.8994" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="81.2523">Website/App asking for data</text>
+                <polygon fill="black" points="184.9771,97.0322,190.2025,99.1223,184.9771,101.2124,187.0673,99.1223" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="23.514" x2="188.1123" y1="99.1223" y2="99.1223" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="27.1718" y="96.4752">choose Provider</text>
+                <rect fill="white" height="1.5676" width="800" x="1.5676" y="114.0492" stroke="white" stroke-width="0.5225342913128674"></rect>
+                <line x1="1.5676" x2="801.5676" y1="114.0492" y2="114.0492" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <line x1="1.5676" x2="801.5676" y1="115.6168" y2="115.6168" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <rect fill="white" height="12.0877" width="54.8661" x="374.1346" y="108.5279" stroke="#000000" stroke-width="1.0450685826257349"></rect>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="377.2698" y="116.9234">RP Request</text>
+                <polygon fill="black" points="196.9954,134.7934,191.7701,136.8836,196.9954,138.9737,194.9053,136.8836" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <polygon fill="black" points="511.5611,134.7934,516.7864,136.8836,511.5611,138.9737,513.6512,136.8836" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="193.8602" x2="514.6963" y1="136.8836" y2="136.8836" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="134.2365">Establish mutual TLS</text>
+                <polygon fill="black" points="511.5611,150.0163,516.7864,152.1065,511.5611,154.1966,513.6512,152.1065" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="191.2476" x2="514.6963" y1="152.1065" y2="152.1065" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="194.9053" y="149.4594">POST /initiate-authorize (client credentials, request JWS)</text>
+                <line x1="517.8315" x2="539.7779" y1="167.3294" y2="167.3294" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="167.3294" y2="174.1223" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="174.1223" y2="174.1223" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,172.0322,518.354,174.1223,523.5794,176.2124,521.4892,174.1223" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="164.6822">Validate Auth Client</text>
+                <line x1="517.8315" x2="539.7779" y1="189.3452" y2="189.3452" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="189.3452" y2="196.1381" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="196.1381" y2="196.1381" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,194.048,518.354,196.1381,523.5794,198.2283,521.4892,196.1381" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="186.6981">Validate request</text>
+                <line x1="517.8315" x2="539.7779" y1="211.361" y2="211.361" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="211.361" y2="218.154" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="218.154" y2="218.154" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,216.0638,518.354,218.154,523.5794,220.2441,521.4892,218.154" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="208.7139">Validate Scopes of the request (as mandatory) Check RP can request these details</text>
+                <line x1="517.8315" x2="539.7779" y1="233.3769" y2="233.3769" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="233.3769" y2="240.1698" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="240.1698" y2="240.1698" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,238.0797,518.354,240.1698,523.5794,242.26,521.4892,240.1698" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="230.7298">Create request_uri (URN) and store JWS</text>
+                <polygon fill="black" points="196.9954,253.3026,191.7701,255.3927,196.9954,257.4829,194.9053,255.3927" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="193.8602" x2="517.3089" y1="255.3927" y2="255.3927" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="252.7456">HTTP 201 request_uri, expires_in</text>
+                <rect fill="white" height="1.5676" width="800" x="1.5676" y="270.3196" stroke="white" stroke-width="0.5225342913128674"></rect>
+                <line x1="1.5676" x2="801.5676" y1="270.3196" y2="270.3196" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <line x1="1.5676" x2="801.5676" y1="271.8872" y2="271.8872" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <rect fill="white" height="12.0877" width="114.9575" x="344.0888" y="264.7983" stroke="#000000" stroke-width="1.0450685826257349"></rect>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="347.224" y="273.1938">Customer Accepts Request</text>
+                <polygon fill="black" points="29.2619,291.0638,24.0366,293.154,29.2619,295.2441,27.1718,293.154" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="26.1267" x2="190.725" y1="293.154" y2="293.154" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="290.5069">302 Location: /authorize; (clientId, request_uri)</text>
+                <polygon fill="black" points="511.5611,306.2867,516.7864,308.3769,511.5611,310.467,513.6512,308.3769" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="23.514" x2="514.6963" y1="308.3769" y2="308.3769" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="27.1718" y="305.7298">/authorize (clientId, request_uri)</text>
+                <line x1="517.8315" x2="539.7779" y1="323.5998" y2="323.5998" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="323.5998" y2="330.3927" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="330.3927" y2="330.3927" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,328.3026,518.354,330.3927,523.5794,332.4829,521.4892,330.3927" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="320.9527">Obtain request JWS using request_uri</text>
+                <line x1="517.8315" x2="539.7779" y1="345.6156" y2="345.6156" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="345.6156" y2="352.4086" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="352.4086" y2="352.4086" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,350.3184,518.354,352.4086,523.5794,354.4987,521.4892,352.4086" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="342.9685">Validate clientid, scope, redirect_uri, request JWS </text>
+                <polygon fill="black" points="29.2619,365.5413,24.0366,367.6315,29.2619,369.7216,27.1718,367.6315" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <polygon fill="black" points="511.5611,365.5413,516.7864,367.6315,511.5611,369.7216,513.6512,367.6315" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="26.1267" x2="514.6963" y1="367.6315" y2="367.6315" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="364.9843">Authenticate (Login)</text>
+                <polygon fill="black" points="29.2619,380.7642,24.0366,382.8543,29.2619,384.9445,27.1718,382.8543" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <polygon fill="black" points="511.5611,380.7642,516.7864,382.8543,511.5611,384.9445,513.6512,382.8543" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="26.1267" x2="514.6963" y1="382.8543" y2="382.8543" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="380.2072">Accept consent / Select information to share/ Add Data Provider</text>
+                <line x1="517.8315" x2="539.7779" y1="398.0772" y2="398.0772" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="398.0772" y2="404.8702" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="404.8702" y2="404.8702" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,402.78,518.354,404.8702,523.5794,406.9603,521.4892,404.8702" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="395.4301">store consent</text>
+                <polygon fill="black" points="29.2619,418.0029,24.0366,420.0931,29.2619,422.1832,27.1718,420.0931" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="26.1267" x2="517.3089" y1="420.0931" y2="420.0931" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="32.3971" y="417.446">302 Location: redirect_uri, state, code (authorization-code)</text>
+                <polygon fill="black" points="184.9771,433.2258,190.2025,435.316,184.9771,437.4061,187.0673,435.316" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="23.514" x2="188.1123" y1="435.316" y2="435.316" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="27.1718" y="432.6689">GET authorization_code, state</text>
+                <line x1="191.2476" x2="213.194" y1="450.5389" y2="450.5389" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="213.194" x2="213.194" y1="450.5389" y2="457.3318" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="191.7701" x2="213.194" y1="457.3318" y2="457.3318" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="196.9954,455.2417,191.7701,457.3318,196.9954,459.4219,194.9053,457.3318" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="194.9053" y="447.8917">validate state</text>
+                <rect fill="white" height="1.5676" width="800" x="1.5676" y="472.2587" stroke="white" stroke-width="0.5225342913128674"></rect>
+                <line x1="1.5676" x2="801.5676" y1="472.2587" y2="472.2587" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <line x1="1.5676" x2="801.5676" y1="473.8263" y2="473.8263" stroke="#000000" stroke-width="0.5225342913128674"></line>
+                <rect fill="white" height="12.0877" width="94.5787" x="354.2782" y="466.7374" stroke="#000000" stroke-width="1.0450685826257349"></rect>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" font-weight="bold" x="357.4135" y="475.1329">RP Token Interchange</text>
+                <polygon fill="black" points="196.9954,493.0029,191.7701,495.0931,196.9954,497.1832,194.9053,495.0931" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <polygon fill="black" points="511.5611,493.0029,516.7864,495.0931,511.5611,497.1832,513.6512,495.0931" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="193.8602" x2="514.6963" y1="495.0931" y2="495.0931" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="492.446">Establish mutual TLS</text>
+                <polygon fill="black" points="511.5611,508.2258,516.7864,510.316,511.5611,512.4061,513.6512,510.316" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="191.2476" x2="514.6963" y1="510.316" y2="510.316" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="194.9053" y="507.6689">POST /token (client credentials, authorization_code, redirect_uri, grantype:authorization_code)</text>
+                <line x1="517.8315" x2="539.7779" y1="525.5389" y2="525.5389" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="539.7779" x2="539.7779" y1="525.5389" y2="532.3318" stroke="black" stroke-width="0.5225342913128674"></line>
+                <line x1="518.354" x2="539.7779" y1="532.3318" y2="532.3318" stroke="black" stroke-width="0.5225342913128674"></line>
+                <polygon fill="black" points="523.5794,530.2417,518.354,532.3318,523.5794,534.4219,521.4892,532.3318" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="521.4892" y="522.8917">validate request</text>
+                <polygon fill="black" points="196.9954,545.4646,191.7701,547.5547,196.9954,549.6448,194.9053,547.5547" stroke="black" stroke-width="0.5225342913128674"></polygon>
+                <line x1="193.8602" x2="517.3089" y1="547.5547" y2="547.5547" stroke="black" stroke-width="0.5225342913128674"></line>
+                <text fill="#000000" font-family="sans-serif" font-size="6.7929" x="200.1306" y="544.9076">id_token (JWS or JWE), (access/refresh)</text>
+                <!--MD5=[2ec629e32d5665218b015c0a5b21004d]
+@startuml
+scale max 800 width
+actor Customer
+
+Entity RP
+
+Entity OP
+
+
+
+== RP Website/App ==
+
+RP -> Customer: Website/App asking for data
+
+Customer -> RP: choose Provider
+
+== RP Request ==
+
+RP <-> OP: Establish mutual TLS
+
+RP -> OP:  POST /initiate-authorize (client credentials, request JWS)
+
+OP -> OP: Validate Auth Client
+
+OP -> OP: Validate request
+
+OP -> OP: Validate Scopes of the request (as mandatory) Check RP can request these details
+
+OP -> OP: Create request_uri (URN) and store JWS
+
+OP -> RP: HTTP 201 request_uri, expires_in
+
+== Customer Accepts Request ==
+
+RP -> Customer: 302 Location: /authorize; (clientId, request_uri)
+
+Customer -> OP: /authorize (clientId, request_uri)
+
+OP -> OP: Obtain request JWS using request_uri
+
+OP -> OP: Validate clientid, scope, redirect_uri, request JWS 
+
+Customer <-> OP : Authenticate (Login)
+
+Customer <-> OP: Accept consent / Select information to share/ Add Data Provider
+
+OP -> OP: store consent
+
+OP -> Customer: 302 Location: redirect_uri, state, code (authorization-code)
+
+Customer -> RP: GET authorization_code, state
+
+RP -> RP:  validate state
+
+== RP Token Interchange ==
+
+RP <-> OP: Establish mutual TLS
+
+RP -> OP: POST /token (client credentials, authorization_code, redirect_uri, grantype:authorization_code)
+
+OP -> OP: validate request
+
+OP -> RP: id_token (JWS or JWE), (access/refresh)
+@enduml
+
+PlantUML version 1.2020.03beta11(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.7.0_25-b15
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+-->
+  </g>
+            </svg>
+          </div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a></figcaption></figure>
+<p id="section-2.1-3"><a href="http://www.plantuml.com/plantuml/uml/XLFHRjiw37ttL_0n1b8aj_Tbo9QXGHPi7OhPQBBrCL0bDXPgIvb4T-s-nj_YBnlbHe6zP9kV3F6SG_AGlF8a7DLLcNWfIeHAFCERwHH-Q4L58YHP1ylQawtG9SdAaAONkCsFlrcUy3UVynlSuRtNX9F5VW_pUPBmqyNx8tisY0l_gCqE7bXU2H994c5COQqPoC9QZv0x-wGLkfZZ5h_Nw2dglsDqnkYL9t5VQbz0LLCjIjZSh6C176-RjicpzGOcscZIWl12r5HOftyYZ6IfqH18XmeDHqi_1dV8y_bkdIP9bhVD8TCtKMh50h1W0LXsrBE0A74-k9PsZnxi0r1nXC98UAY4OOHrBoai2vIFeMifJCG4l4TGI4ANVY2-TDZBkwsTXj7Nsoyfi29ubiJGJg2mBMqJNFwqsUHmEVslJngt3JxljKE_rQRp_JYRXPIu9n-dS7RA_qyluSPAGTgQ6KoEFh-DHb-hSJzTEfnzblT9V-PaUKHdzoIqwKyCQi_BrIT4_606hzAQfNsOHiYWj4CPNUWfjaslojUbWrct0a511hNHZTrfavxWPWVNG5hZ6GqJM6F9MK0RNl-gCmh8WY-4mmaib88FWiHnzVkrTrECIXpuc_V3TfWg2CVCLGYZQ727l0XlwUa9VbnjO03S1k11AGm-0jlcANhQnUAnRkmZ6hWsX4uMmkpmjxDjct_SBRmUBGMTitTwjhvXtpid3BtiSNOA7Lxsqvd3ZHrgjJqK4TRBEjw9LJfc7wL4xoSE7npw8askqAYwAdy1">Diagram Source Here</a><a href="#section-2.1-3" class="pilcrow">¶</a></p>
+<p id="section-2.1-4">The Authorization Code Flow goes through the following steps: (separated in groups as in the flow diagram)<a href="#section-2.1-4" class="pilcrow">¶</a></p>
+<div id="rp-website-app-flow-steps">
+<section id="section-2.1.1">
+          <h4 id="name-rp-website-app-flow-steps">
+<a href="#section-2.1.1" class="section-number selfRef">2.1.1. </a><a href="#name-rp-website-app-flow-steps" class="section-name selfRef">RP website/APP Flow Steps</a>
+          </h4>
+<p id="section-2.1.1-1">This is the start of the process, can be initiated and presented to the customer in many different ways but common steps are:<a href="#section-2.1.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.1.1-2">
+            <li id="section-2.1.1-2.1">
+              <p id="section-2.1.1-2.1.1">Customer is navigating in a RP website or using an RP app.<a href="#section-2.1.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.1-2.2">
+              <p id="section-2.1.1-2.2.1">RP website/app asks for a certified data to the customer and offers the different providers that are integrated in the RP implementation.<a href="#section-2.1.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.1-2.3">
+              <p id="section-2.1.1-2.3.1">Customer selects a provider to provide the requested information.<a href="#section-2.1.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+<div id="rp-request-flow-steps">
+<section id="section-2.1.2">
+          <h4 id="name-rp-request-flow-steps">
+<a href="#section-2.1.2" class="section-number selfRef">2.1.2. </a><a href="#name-rp-request-flow-steps" class="section-name selfRef">RP Request Flow Steps</a>
+          </h4>
+<p id="section-2.1.2-1">Once the RP gets the provider selected by the customer the steps to initiate the information interchange are:<a href="#section-2.1.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.1.2-2">
+            <li id="section-2.1.2-2.1">
+              <p id="section-2.1.2-2.1.1">It is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> for more information on using TLS.<a href="#section-2.1.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.2-2.2">
+              <p id="section-2.1.2-2.2.1">RP sends the request to the Initiate Authorization endpoint in OP to initiate the process, the auhtorization data is sent inside a request object as described in section <a href="#initi-auth-req">Initiate Authorization Request</a> of this specification.<a href="#section-2.1.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.2-2.3">
+              <p id="section-2.1.2-2.3.1">OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>, additionally MUST validate the <code>request</code> JWS following Section 6.3. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> specification.<a href="#section-2.1.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.2-2.4">
+              <p id="section-2.1.2-2.4.1">If validations are correct the OP MUST store the JWS and generate a <code>request_uri</code> that identify where is located. As described in <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span> specification.<a href="#section-2.1.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.2-2.5">
+              <p id="section-2.1.2-2.5.1">OP will return to the RP a response with the format described in section <a href="#succ-init-auth-resp">Successful Initiate Authorization Response</a> of this specification.<a href="#section-2.1.2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.2-2.6">
+              <p id="section-2.1.2-2.6.1">In case of any error OP will return an error response as described in section <a href="#err-init-auth-resp">Initiate Authorization Error Response</a> of this specification.<a href="#section-2.1.2-2.6.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+<div id="customer-accepts-request-flow-steps">
+<section id="section-2.1.3">
+          <h4 id="name-customer-accepts-request-fl">
+<a href="#section-2.1.3" class="section-number selfRef">2.1.3. </a><a href="#name-customer-accepts-request-fl" class="section-name selfRef">Customer Accepts Request Flow Steps</a>
+          </h4>
+<p id="section-2.1.3-1">Once the OP has validated the request JWS from RP, the user authentication and consent flow continues as follow:<a href="#section-2.1.3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.1.3-2">
+            <li id="section-2.1.3-2.1">
+              <p id="section-2.1.3-2.1.1">RP responds to the user with a HTTP 302 redirect response as described in Section 3.1.2.1 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>, containing in Location header the url with the needed params to make an authentication Request to OP. An example of this response can be found in <a href="#auth-redirect-resp">Authorize redirect response</a><a href="#section-2.1.3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.2">
+              <p id="section-2.1.3-2.2.1">The customer User Agent follows the redirection and make an Authentication Request to the Authorization Endpoint in OP. Example of the request: <a href="#auth-req">Authentication request</a>.<a href="#section-2.1.3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.3">
+              <p id="section-2.1.3-2.3.1">OP MUST obtain the request JWS from storage using the <code>request_uri</code> parameter, OP MUST check that <code>request_uri</code> is still valid and not expired.<a href="#section-2.1.3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.4">
+              <p id="section-2.1.3-2.4.1">OP then MUST validate the request as described in Section 3.1.2.2. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>, OP MUST be aware that even if the <code>request_uri</code> parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-2.1.3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.5">
+              <p id="section-2.1.3-2.5.1">If the request is valid, the OP attempts to Authenticate the End-User or determines whether the End-User is Authenticated, the way to authenticate the user (user, password, 2FA, cookies... ) is out of the scope of this specification. The normal approach is to present the user one or more pages (steps auth) to authenticate the user. More details in Section 3.1.2.3. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-2.1.3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.6">
+              <p id="section-2.1.3-2.6.1">Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End-user to take a decision, in this case please follow the security recommendations described in section <a href="#security-considerations">Security Considetarions</a>. The customer then accepts or selects information to share with the RP.<a href="#section-2.1.3-2.6.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.7">
+              <p id="section-2.1.3-2.7.1">Once customer consents the request, OP will store the consent information (which claims has been consented) and generates an authorization code.<a href="#section-2.1.3-2.7.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.8">
+              <p id="section-2.1.3-2.8.1">OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the <code>redirect_uri</code> and as query parameter the generated <code>code</code>, as described in Section 3.1.2.5. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. Example of the response: <a href="#succ-auth-resp">Successful Authorize response</a>.<a href="#section-2.1.3-2.8.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.9">
+              <p id="section-2.1.3-2.9.1">In case of any error OP will return an error response as described in section <a href="#err-resp">Error Response</a>, and will use the error codes from Section 3.1.2.6 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-2.1.3-2.9.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.10">
+              <p id="section-2.1.3-2.10.1">The customer User Agent follows the redirection and makes a request to the RP callback uri, providing the authorization code in the query string, example of the request: <a href="#callback-req">Callback RP request</a>.<a href="#section-2.1.3-2.10.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.3-2.11">
+              <p id="section-2.1.3-2.11.1">RP MUST validate the authorization response following Section 3.1.2.7. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> specification.<a href="#section-2.1.3-2.11.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+<div id="rp-token-interchange-flow-steps">
+<section id="section-2.1.4">
+          <h4 id="name-rp-token-interchange-flow-s">
+<a href="#section-2.1.4" class="section-number selfRef">2.1.4. </a><a href="#name-rp-token-interchange-flow-s" class="section-name selfRef">RP Token Interchange Flow Steps</a>
+          </h4>
+<p id="section-2.1.4-1">If the RP obtains the consent from the customer in form of authorization <code>code</code>, the token interchange process continue with these steps:<a href="#section-2.1.4-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-2.1.4-2">
+            <li id="section-2.1.4-2.1">
+              <p id="section-2.1.4-2.1.1">Is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> for more information on using TLS.<a href="#section-2.1.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.4-2.2">
+              <p id="section-2.1.4-2.2.1">RP sends a token request to the OP <code>/token</code> endpoint containing the authorization <code>code</code>, following the specification described in the section 3.1.3.1. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. An example of this request in section <a href="#token-req">Token request</a><a href="#section-2.1.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.4-2.3">
+              <p id="section-2.1.4-2.3.1">OP MUST validate that the client is correctly authenticate and MUST validate the request following the specification in Section 3.1.3.2. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. In case of any error OP will return an error response as described in section <a href="#err-resp">Error Response</a>, and will use the error codes from Section 3.1.3.4. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-2.1.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-2.1.4-2.4">
+              <p id="section-2.1.4-2.4.1">If validations are correct OP returns a successful response that includes an <code>id_token</code> and an <code>access_token</code> as described in Section 3.1.3.3. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. An example of response: <a href="#token-resp">Token response</a>. RP must validate the token response as described in Section 3.1.3.5 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-2.1.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="init-auth-endpoint">
+<section id="section-3">
+      <h2 id="name-initiate-authorization-endp">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-initiate-authorization-endp" class="section-name selfRef">Initiate Authorization Endpoint</a>
+      </h2>
+<p id="section-3-1">This endpoint is a profile of the specification defined in OAuth 2.0 Pushed Authorization Requests <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span>, see Section <a href="#par-rest-ext">PAR Restrictions and Extension</a> for more info about differences with the PAR specification.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Initiate Authorization endpoint performs the validation of the request and stores the JWS that is going to be referenced as <code>request_uri</code> in the Authorization Request.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<div id="initi-auth-req">
+<section id="section-3.1">
+        <h3 id="name-initiate-authorization-requ">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-initiate-authorization-requ" class="section-name selfRef">Initiate Authorization Request</a>
+        </h3>
+<p id="section-3.1-1">Initiate Authorization Request follow the specification described in Section 2.1. of <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span>.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">OP MUST support the use of the HTTP POST method defined in <span>[<a href="#RFC2616" class="xref">RFC2616</a>]</span> at the Initiate Authorization Endpoint. The Client uses a HTTPS POST to send a parameter <code>request</code> with a signed JWT that should contain the data explained in section 3.1.2.1 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. Request parameters are serialized using Form Serialization as described in section 13.2. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>. This JWT is a "Request Object" as described in Section 6 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">The Client MUST authenticate with the Initiate Authorization Endpoint using the authentication method registered for its <code>client_id</code>, as described in Section <a href="#client-auth-methods">Client Authentication Methods.</a><a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<p id="section-3.1-4">The following is a non-normative example of a Initiate Authorization Request. (line wraps within JWS for display purposes only)<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.1-5">
+<pre>POST /initiate-authorize HTTP/1.1
+Host: op.example.com
+Content-Type: application/x-www-form-urlencoded
+
+ request=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX2tleV8yIn0.eyJpc3MiOiIzZGZkODllMS05NjRiLTRhYzQtYmE0Ni05NzdmYzVmODdkYjk
+iLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUuY29tIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJjbGllbnRfaWQiOiIzZGZkODllMS05NjRiLTRhYzQtYm
+E0Ni05NzdmYzVmODdkYjkiLCJyZWRpcmVjdF91cmkiOiJodHRwczovL3JwLmV4YW1wbGUub3JnL2NiIiwic2NvcGUiOiJvcGVuaWQiLCJzdGF0ZSI6ImFmM
+GlmanNsZGtqIiwibm9uY2UiOiJuLTAxMF9NMTZVMzEiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsiZ2l2ZW5fbmFtZSI6eyJlc3NlbnRpYWwiOnRydWV9LCJm
+YW1pbHlfbmFtZSI6eyJlc3NlbnRpYWwiOnRydWV9LCJwYXNzcG9ydF9udW1iZXIiOm51bGwsIm5hdGlvbmFsaXR5IjpudWxsLCJiaXJ0aGRhdGUiOnsiZXN
+zZW50aWFsIjp0cnVlfSwicGxhY2Vfb2ZfYmlydGgiOm51bGx9fSwiaWF0IjoxNTY4NzI0OTQ5LCJuYmYiOjE1Njg3MjQ5NDksImV4cCI6MTU2ODcyNTAwOS
+wianRpIjoiYTMyNGM5YWMtYTQ3Yy00MWE4LWFkM2ItMDY5M2IxODE3ZGM5In0.EojFJ5r_FgDGcQS9kjKgwgs759DN6MlS9di_LCnwN2le0PFo51fVYKLwu
+pIfnCduY_i2iPgVuCMlx9UM5WV9FdogDf-r1BoF-cp9FLCCd8x-C9VIXKHTXO5jkQ-6jiOG1X00gK7s9-zL7DGlFjXYy8FKiyB1ByZ3onEI4IFFCnJyq3PuTK6UqIYVOOsQ_JgkQvtSdRFVF3jQUzT5bcZb8vGhLL8LGRktfa7CtI-6iHkZzRvcyQvB65hT3yUsC7qxA8UHazHN4n8jIh_vjoMmopMNhFnRzUdEQyuF5l25uJkr5gYbzcrzJPA0byTp4h186muiAxQKWookHSIUNO-ubQ
+ &amp;client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+ &amp;client_assertion=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiL
+TRhYzQtYmE0Ni05NzdmYzVmODdkYjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsInN1YiI6IjNkZmQ4OWUxLTk2NGItNGFjNC1i
+YTQ2LTk3N2ZjNWY4N2RiOSIsImlhdCI6MTU3MDAyMjU3NiwibmJmIjoxNTcwMDIyNTc2LCJleHAiOjE1NzAwMjI2MzYsImp0aSI6IjcwMzNhMDV
+lLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nDmglkyyCj3ZJvvxjNE-c6H6wK7
+mEbL5d1StP1dhK7iARAkDH-7Jm-CxmcnmvbiqINkVjjkzrww3BMfwa87MPXga7C8-5u8VXokbfiCflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVD
+zAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8rto3xB7af5wfTJuvsXIIC1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTn
+er1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
+</pre><a href="#section-3.1-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="initiate-authorization-request-validation">
+<section id="section-3.2">
+        <h3 id="name-initiate-authorization-reque">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-initiate-authorization-reque" class="section-name selfRef">Initiate Authorization Request Validation</a>
+        </h3>
+<p id="section-3.2-1">The Authorization Server MUST validate the request received as follows:<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.2-2">
+          <li id="section-3.2-2.1">
+            <p id="section-3.2-2.1.1">The Authorization Server MUST verify that Client authentication is valid.<a href="#section-3.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.2-2.2">
+            <p id="section-3.2-2.2.1">The Authorization Server MUST verify that the request fulfils all validations described in section 3.1.2.2 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-3.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.2-2.3">
+            <p id="section-3.2-2.3.1">The Authorization Server MUST verify that the request object is a valid JWS, the signature algorithm is not <code>none</code>, and the signature is correct as in section 6.3 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-3.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.2-2.4">
+            <p id="section-3.2-2.4.1">The Authorization Server MUST verify that Client is asking for user claims using scopes (including scope templates) or claims parameter, as described in section 5.4. and 5.5. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-3.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+<p id="section-3.2-3">If the Authorization Server encounters any error, it MUST return an error response, as per Section <a href="%7B#err-init-auth-resp%7D">Initiate Authorization Error Response</a> in this document.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="succ-init-auth-resp">
+<section id="section-3.3">
+        <h3 id="name-successful-initiate-authori">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-successful-initiate-authori" class="section-name selfRef">Successful Initiate Authorization Response</a>
+        </h3>
+<p id="section-3.3-1">If the verification is successful, the authorization server shall generate a request URI and return a JSON payload that contains <code>request_uri</code> and <code>expires_in</code> claims at the top level with 201 Created HTTP response code, as described in Section 2.2. of <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">The <code>request_uri</code> shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The request URI shall be bound to the client identifier of the client that posted the request object. Since the request URI can be replayed, its lifetime should be short and preferably limited to one-time use.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">The value of these claims in the JSON payload shall be as follows:<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-3.3-4.1">
+            <p id="section-3.3-4.1.1"><code>request_uri</code>: The request URI corresponding to the request object posted.<a href="#section-3.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.3-4.2">
+            <p id="section-3.3-4.2.1"><code>expires_in</code>: A JSON number that represents the lifetime of the request URI in seconds. The request URI lifetime is at the discretion of the OP.<a href="#section-3.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.3-4.3">
+            <p id="section-3.3-4.3.1"><code>errors</code>: See section <a href="#error-member">errors member in Successful Initiate Authorization Response</a> for more info about this field.<a href="#section-3.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+<p id="section-3.3-5">The following is a non-normative example of a Initiate Authorization Successful Response:<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.3-6">
+<pre>HTTP/1.1 201 Created
+Date: Tue, 2 May 2017 15:22:31 GMT
+Content-Type: application/json
+
+{
+    "request_uri": "urn:example:Y7AyOKAK",
+    "expires_in": 3600,
+        "errors": { "group": "id_token","key": "familo_name","description": "unknown claim."}
+}
+</pre><a href="#section-3.3-6" class="pilcrow">¶</a>
+</div>
+<p id="section-3.3-7">Note that <code>request_uri</code> can be either URL or URN, within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI nor rely on the entropy of the URI for the confidentiality of the request object.<a href="#section-3.3-7" class="pilcrow">¶</a></p>
+<p id="section-3.3-8">When the request object is stored at the authorization server, the <code>request_uri</code> value typically is a <span>[<a href="#URN" class="xref">URN</a>]</span>.<a href="#section-3.3-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="err-init-auth-resp">
+<section id="section-3.4">
+        <h3 id="name-initiate-authorization-erro">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-initiate-authorization-erro" class="section-name selfRef">Initiate Authorization Error Response</a>
+        </h3>
+<p id="section-3.4-1">A Initiate Authorization Error Response is an OAuth 2.0 Authorization Error Response message returned from the OP's Authorization Endpoint in response to the Initiate Authorization Request message sent by the RP. The error response will follow the specification described in Section <a href="#err-resp">Error Response</a>.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">In addition to the error codes defined in Section 4.1.2.1 of OAuth 2.0 Authorization Framework <span>[<a href="#OAuth2.0" class="xref">OAuth2.0</a>]</span>, this specification also defines the following error codes:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-3.4-3.1">
+            <p id="section-3.4-3.1.1"><code>invalid_request_object</code>: The parameters inside the request object are invalid, is signed with none algorithm or the signature is not correct.<a href="#section-3.4-3.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.4-3.2">
+            <p id="section-3.4-3.2.1"><code>invalid_request</code>: The request not contain the parameter <code>request</code>.<a href="#section-3.4-3.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.4-3.3">
+            <p id="section-3.4-3.3.1"><code>method_not_allowed</code>: If the request was not POST, the authorization server MUST return a HTTP 405 Method Not Allowed status code.<a href="#section-3.4-3.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.4-3.4">
+            <p id="section-3.4-3.4.1"><code>too_many_request</code>: If the request from the client per a time period goes beyond the number the authorization server allows. the authorization server MUST return a HTTP 429 Too Many Requests status code.<a href="#section-3.4-3.4.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+<p id="section-3.4-4">The following is a non-normative example of an Initiate Authorization Error Response:<a href="#section-3.4-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.4-5">
+<pre>HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+ "error": "invalid_request_object",
+ "error_description": "Incorrect signature"
+}
+</pre><a href="#section-3.4-5" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="initiate-authorization-response-validation">
+<section id="section-3.5">
+        <h3 id="name-initiate-authorization-resp">
+<a href="#section-3.5" class="section-number selfRef">3.5. </a><a href="#name-initiate-authorization-resp" class="section-name selfRef">Initiate Authorization Response Validation</a>
+        </h3>
+<p id="section-3.5-1">The Client MUST validate that the Inititate Authorization Response contains a valid <code>request_uri</code> and <code>expires_in</code> parameters.<a href="#section-3.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="error-member">
+<section id="section-3.6">
+        <h3 id="name-errors-member-in-successful">
+<a href="#section-3.6" class="section-number selfRef">3.6. </a><a href="#name-errors-member-in-successful" class="section-name selfRef"><em>errors</em> member in Successful Initiate Authorization Response</a>
+        </h3>
+<p id="section-3.6-1">This specification add an additional field called <code>errors</code> in the successful response of the initiate authorize response, the original fields (<code>request_uri</code> and <code>expires_in</code>) are described in in Section 2.2. of <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span>.<a href="#section-3.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.6-2"><code>errors</code> member is an OPTIONAL field of type array that contain a list of errors that are detected in the <code>claims</code> request parameter (see section 5.5. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-3.6-2" class="pilcrow">¶</a></p>
+<p id="section-3.6-3">The purpose of this new field is to avoid the RP wait until the end of the process when exchange the code for the <code>id_token</code> in the <code>/token</code> endpoint or when obtain the claims in the user info endpoint using the <code>access_token</code> to know about an error in the request syntax, this fields give the RP a quick feedback in the success response, this means that RP can continue with the process but is already aware about the problem.<a href="#section-3.6-3" class="pilcrow">¶</a></p>
+<p id="section-3.6-4">The following is a non-normative example of a <code>errors</code> member structure<a href="#section-3.6-4" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-3.6-5">
+<pre>"errors": [
+        {
+                "group": "id_token",
+                "key": "familo_name",
+                "description": "unknown claim."
+        },
+        {
+                "group": "userinfo",
+                "key": "given_name",
+                "description": "unknown member inside claim"
+        }
+]
+</pre><a href="#section-3.6-5" class="pilcrow">¶</a>
+</div>
+<p id="section-3.6-6">Each array object contain the next fields:<a href="#section-3.6-6" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-3.6-7.1">
+            <p id="section-3.6-7.1.1"><code>group</code>: The group <code>id_token</code> or <code>userinfo</code> where claim is requested.<a href="#section-3.6-7.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.6-7.2">
+            <p id="section-3.6-7.2.1"><code>key</code>: The claim name that contain the problem.<a href="#section-3.6-7.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.6-7.3">
+            <p id="section-3.6-7.3.1"><code>description</code>: An error description to help RP developer.<a href="#section-3.6-7.3.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</section>
+</div>
+<div id="par-rest-ext">
+<section id="section-3.7">
+        <h3 id="name-par-restrictions-and-extens">
+<a href="#section-3.7" class="section-number selfRef">3.7. </a><a href="#name-par-restrictions-and-extens" class="section-name selfRef">PAR Restrictions and Extension</a>
+        </h3>
+<p id="section-3.7-1">The Initiate Authorization Endpoint has some restrictions or add ons to the original specification described in <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span>.<a href="#section-3.7-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3.7-2">
+          <li id="section-3.7-2.1">
+            <p id="section-3.7-2.1.1">The endpoint recommended name is <code>/initiate-authorize</code>.<a href="#section-3.7-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.2">
+            <p id="section-3.7-2.2.1">OP SHALL require the use of a request object sent in the request parameter.<a href="#section-3.7-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.3">
+            <p id="section-3.7-2.3.1">OP SHALL support only signed JWT request objects, this means OP SHALL REQUIRE request parameter.<a href="#section-3.7-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.4">
+            <p id="section-3.7-2.4.1">OP SHALL ONLY allow <em>response_type</em> with value <code>code</code>.<a href="#section-3.7-2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.5">
+            <p id="section-3.7-2.5.1">OP SHALL only support the client authentication methods described in Section <a href="#client-auth-methods">Client Authentication Methods</a>.<a href="#section-3.7-2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.6">
+            <p id="section-3.7-2.6.1">OP MAY NOT implement the error validation described in Section "2.3.1.5. Request entity too large" of <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span>.<a href="#section-3.7-2.6.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.7">
+            <p id="section-3.7-2.7.1">OP SHALL REQUIRE scope param contain value <code>openid</code>.<a href="#section-3.7-2.7.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-3.7-2.8">
+            <p id="section-3.7-2.8.1">OP MAY return the <code>errors</code> field in the Successful Initiate Authorization Response to help RP.<a href="#section-3.7-2.8.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+</section>
+</div>
+<div id="txn-claim">
+<section id="section-4">
+      <h2 id="name-txn-claim">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-txn-claim" class="section-name selfRef">txn Claim</a>
+      </h2>
+<p id="section-4-1">As part of this specification a new claim called txn should be introduced by the OP in all the <code>id_tokens</code> generated and also in the <code>/userinfo</code> endpoint responses, this claim as defined in <span>[<a href="#RFC8417" class="xref">RFC8417</a>]</span> is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">This transaction data MUST be stored as long as it is required to store transaction data for auditing purposes by the respective regulation.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">The <code>txn</code> value MUST allow an RP to obtain these transaction details if needed.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">Note: The mechanism to obtain the transaction details from the OP and their format is out of scope of this specification.<a href="#section-4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="openid-restrictions-and-extensions">
+<section id="section-5">
+      <h2 id="name-openid-restrictions-and-ext">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-openid-restrictions-and-ext" class="section-name selfRef">OpenID Restrictions and Extensions</a>
+      </h2>
+<div id="client-aka-rp">
+<section id="section-5.1">
+        <h3 id="name-client-aka-rp">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-client-aka-rp" class="section-name selfRef">Client (aka RP)`</a>
+        </h3>
+<p id="section-5.1-1">A client specification statements are:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.1-2">
+          <li id="section-5.1-2.1">
+            <p id="section-5.1-2.1.1">MAY support mutual TLS connections.<a href="#section-5.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.2">
+            <p id="section-5.1-2.2.1">if mutual TLS is not possible, client SHALL communicate with the Authorization Server using TLS. See Section 16.17 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> for more information on using TLS.<a href="#section-5.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.3">
+            <p id="section-5.1-2.3.1">SHALL authenticate when making requests to the Authentication Server at the <code>/token</code> and <code>/initiate-authorize</code> endpoint, as described in Section <a href="#client-auth-methods">Client Authentication Methods</a>.<a href="#section-5.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.4">
+            <p id="section-5.1-2.4.1">SHALL include the <code>request_uri</code> parameter as defined in Section 6 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> in the authentication request;<a href="#section-5.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.5">
+            <p id="section-5.1-2.5.1">SHALL additionally send duplicates of the parameters/values using the OAuth 2.0 request syntax where required by the OAuth specification.<a href="#section-5.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.6">
+            <p id="section-5.1-2.6.1">SHALL use the initiate authorize endpoint before call the authentication request, as described in section <a href="#init-auth-endpoint">Initiate Authorization Endpoint</a> of this specification.<a href="#section-5.1-2.6.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.7">
+            <p id="section-5.1-2.7.1">SHALL sign the JWT request object sent to initiate authorize endpoint, as described in Section 6.1. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-5.1-2.7.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.8">
+            <p id="section-5.1-2.8.1">SHALL NOT use <code>none</code> algorithm in JWT.<a href="#section-5.1-2.8.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.9">
+            <p id="section-5.1-2.9.1">SHALL require and validate JWS signed ID Token be returned from token endpoint.<a href="#section-5.1-2.9.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.10">
+            <p id="section-5.1-2.10.1">SHALL include the <code>nonce</code> parameter in authentication request, as described in in Section 3.1.2.1 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>,<a href="#section-5.1-2.10.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.11">
+            <p id="section-5.1-2.11.1">Is RECOMMENDED to include the <code>state</code> parameters in authentication request, as described in Section <em>3.1.2.1</em> of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>,<a href="#section-5.1-2.11.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.12">
+            <p id="section-5.1-2.12.1">SHALL use as preferred method for request claims the <code>claims</code> parameter inside the JWT request Object as described in section 5.5. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-5.1-2.12.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.13">
+            <p id="section-5.1-2.13.1">MAY use scopes templates as an alternative to request claims.<a href="#section-5.1-2.13.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.14">
+            <p id="section-5.1-2.14.1">SHALL include <code>openid</code> value as scope in all authorization request.<a href="#section-5.1-2.14.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.1-2.15">
+            <p id="section-5.1-2.15.1">SHALL use the PCKE as described in <span>[<a href="#OAuth.NativeApps" class="xref">OAuth.NativeApps</a>]</span> for native apps clients.<a href="#section-5.1-2.15.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+<div id="authentication-server-aka-op">
+<section id="section-5.2">
+        <h3 id="name-authentication-server-aka-o">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-authentication-server-aka-o" class="section-name selfRef">Authentication server (aka OP)</a>
+        </h3>
+<p id="section-5.2-1">The authorization server specification statements are:<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5.2-2">
+          <li id="section-5.2-2.1">
+            <p id="section-5.2-2.1.1">SHALL NOT support public clients.<a href="#section-5.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.2">
+            <p id="section-5.2-2.2.1">MAY support mutual TLS connections.<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.3">
+            <p id="section-5.2-2.3.1">if mutual TLS is not possible, Authorization Server SHALL require use of TLS in the endpoints. See Section 16.17 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> for more information on using TLS.<a href="#section-5.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.4">
+            <p id="section-5.2-2.4.1">SHALL validate for <code>/token</code> and <code>/initiate-authorize</code> endpoint that Client is authenticated, as described in Section <a href="#client-auth-methods">Client Authentication Methods</a>.<a href="#section-5.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.5">
+            <p id="section-5.2-2.5.1">SHALL require the <code>response_type</code> values <code>code</code>;<a href="#section-5.2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.6">
+            <p id="section-5.2-2.6.1">SHALL require signed JWT request object, as described in Section 6.1. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-5.2-2.6.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.7">
+            <p id="section-5.2-2.7.1">SHALL require the <code>request_uri</code> parameter as defined in Section 6 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span> in the authentication request;<a href="#section-5.2-2.7.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.8">
+            <p id="section-5.2-2.8.1">SHALL require that <code>request_uri</code> has been generated by this OP in the endpoint Initiate Authorize and indicates the location of a JWT Request inside the Authentication Server.<a href="#section-5.2-2.8.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.9">
+            <p id="section-5.2-2.9.1">SHALL support the initiate <code>/authorize</code> endpoint, as described in section <a href="#initi-auth-req">Initiate Authorization Request</a> of this specification.<a href="#section-5.2-2.9.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.10">
+            <p id="section-5.2-2.10.1">SHALL return signed ID Token. (JWS)<a href="#section-5.2-2.10.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.11">
+            <p id="section-5.2-2.11.1">SHALL ignore additional parameters passed using the OAuth 2.0 request syntax in the <code>/authorize</code> endpoint, only the <code>client_id</code> param should be passed (will be used to identify the RP), the parameters for authorization should be passed previously inside request_object in initiate authorize endpoint. This statement contradict section 6.1. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-5.2-2.11.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.12">
+            <p id="section-5.2-2.12.1">SHALL validate <code>openid</code> value is present in scopes in all authorization requests.<a href="#section-5.2-2.12.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-5.2-2.13">
+            <p id="section-5.2-2.13.1">SHALL generate and include the <code>txn</code> claim in all the generated <code>id_tokens</code> and claim responses (user info) to maintain a audit trail and traceability for all the Open ID process. (From beginning to end of the transaction)<a href="#section-5.2-2.13.1" class="pilcrow">¶</a></p>
+</li>
+</ol>
+</section>
+</div>
+</section>
+</div>
+<div id="err-resp">
+<section id="section-6">
+      <h2 id="name-error-response">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-error-response" class="section-name selfRef">Error Response</a>
+      </h2>
+<p id="section-6-1">When Authorization Server should return a error to the Client because of any reason, the returned structure for the Error Response will have the defined in section 5.2. of <span>[<a href="#OAuth2.0" class="xref">OAuth2.0</a>]</span>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">In case that the Error Response is returned in a direct communication between the OP and the RP, the error response parameters will be returned in the HTTP response body using the application/json media type with HTTP response code of 400 (unless specified otherwise). As described in Section 3.1.3.4. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The following is a non-normative example Error Response for this case:<a href="#section-6-3" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-6-4">
+<pre>  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  Cache-Control: no-store
+  Pragma: no-cache
+
+  {
+   "error": "invalid_request",
+   "error_description": "Unsupported response_type value"
+  }
+</pre><a href="#section-6-4" class="pilcrow">¶</a>
+</div>
+<p id="section-6-5">In case that the Error Response is returned in a redirection step (like Authentication Request) the error response parameters are added to the query component of the Redirection URI, unless a different Response Mode was specified. As described in Section 3.1.2.6. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-6-6">
+<pre>  HTTP/1.1 302 Found
+  Location: https://rp.example.com/cb?
+    error=invalid_request
+    &amp;error_description=Unsupported%20response_type%20value
+</pre><a href="#section-6-6" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="authorization-server-metadata">
+<section id="section-7">
+      <h2 id="name-authorization-server-metada">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-authorization-server-metada" class="section-name selfRef">Authorization Server Metadata</a>
+      </h2>
+<p id="section-7-1">If the authorization server implement the DTP profile, it SHOULD include the following OAuth/OpenID Provider Metadata parameter in discovery responses:<a href="#section-7-1" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-7-2.1">
+          <p id="section-7-2.1.1"><code>digital_trust_protocol_extension</code> : A boolean field with value <em>true</em> to inform the RP this OP implement this profile.<a href="#section-7-2.1.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<div id="native-apps">
+<section id="section-8.1">
+        <h3 id="name-native-apps">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-native-apps" class="section-name selfRef">Native Apps</a>
+        </h3>
+<p id="section-8.1-1">For authorizing users in native apps the best practice described in RFC <span>[<a href="#OAuth.NativeApps" class="xref">OAuth.NativeApps</a>]</span> should be followed, for example the use of PKCE in the authorization flow.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="client-auth-methods">
+<section id="section-8.2">
+        <h3 id="name-client-authentication-metho">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-client-authentication-metho" class="section-name selfRef">Client Authentication Methods</a>
+        </h3>
+<p id="section-8.2-1">To enhance security implementations MUST only support and allow <code>private_key_jwt</code> as Client Authentication method, described in Section 9. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">The reasons for this specification to do not allow other Client Authentication Methods are:<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-8.2-3.1">
+            <p id="section-8.2-3.1.1"><code>none</code>: is not an authentication method so is not allowed.<a href="#section-8.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-8.2-3.2">
+            <p id="section-8.2-3.2.1"><code>client_secret_basic</code> and <code>client_secret_post</code> send over the network the complete credential that can be intercepted.<a href="#section-8.2-3.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-8.2-3.3">
+            <p id="section-8.2-3.3.1"><code>client_secret_jwt</code> is based on a shared secret and is a less secure version of the <code>private_key_jwt</code>.<a href="#section-8.2-3.3.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-8.2-3.4">
+            <p id="section-8.2-3.4.1"><code>tls_client_auth</code> and <code>self_signed_tls_client_auth</code> described in specification <span>[<a href="#OAuth.MTLS" class="xref">OAuth.MTLS</a>]</span>, are discarded because bind Network and Authentication layer.<a href="#section-8.2-3.4.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+<p id="section-8.2-4">During Client Registration, the RP (Client) MUST register a Client Authentication method. If no method is registered, the default method is <code>private_key_jwt</code>.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
+<p id="section-8.2-5">The supported Client Authentication Methods MAY be expanded if in the future if other method is provided by other implementers that commit with the security level provided by this specification.<a href="#section-8.2-5" class="pilcrow">¶</a></p>
+<p id="section-8.2-6">The next is a non normative example of a jwt bearer following the specification of private<em>key</em>jwt method: (line wraps within JWS for display purposes only)<a href="#section-8.2-6" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-8.2-7">
+<pre>eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiLTRhYzQtY
+mE0Ni05NzdmYzVmODdkYjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsInN1YiI6IjNkZmQ4OWUxLTk2NGItNGFjN
+C1iYTQ2LTk3N2ZjNWY4N2RiOSIsImlhdCI6MTU3MDAyMjU3NiwibmJmIjoxNTcwMDIyNTc2LCJleHAiOjE1NzAwMjI2MzYsImp0a
+SI6IjcwMzNhMDVlLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nD
+mglkyyCj3ZJvvxjNE-c6H6wK7mEbL5d1StP1dhK7iARAkDH-7Jm-CxmcnmvbiqINkVjjkzrww3BMfwa87MPXga7C8-5u8VXokbfi
+CflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVDzAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8rto3xB7af5wfTJuvsXII
+C1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTner1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
+</pre><a href="#section-8.2-7" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="initiate-authorize-endpoint-phishing">
+<section id="section-8.3">
+        <h3 id="name-initiate-authorize-endpoint">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-initiate-authorize-endpoint" class="section-name selfRef">Initiate authorize endpoint phishing</a>
+        </h3>
+<p id="section-8.3-1">In this attack, the RP developer is social engineered into believing that the initiate authorize endpoint has been changed to a URL that is controlled by the attacker. As the result, the client could send sensitive details to a rogue OP and the attacker will get hold of sensitive data.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">This can be partially  mitigated by having the RP to enquiry the value of the above endpoint by calling the well known configuration endpoint. Alternatively, JWE could be used when sending requests.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="token-endpoint-phishing">
+<section id="section-8.4">
+        <h3 id="name-token-endpoint-phishing">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-token-endpoint-phishing" class="section-name selfRef">Token endpoint phishing</a>
+        </h3>
+<p id="section-8.4-1">In this attack, the RP developer is social engineered into believing that the token endpoint has been changed to a URL that is controlled by the attacker. As the result, the client could send an authorization code and a valid credential to a rogue OP. The attacked could then use them to retrieve the token from the honest OP.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+<p id="section-8.4-2">This can be partially  mitigated by having the RP to enquiry the value of the above endpoint by calling the well known configuration endpoint. Alternatively, token can be returned encrypted as JWE.<a href="#section-8.4-2" class="pilcrow">¶</a></p>
+<p id="section-8.4-3">Mutual TLS will prevent this attack, since the token endpoint cannot be called without a valid client certificate.<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cryptographic-considerations">
+<section id="section-8.5">
+        <h3 id="name-cryptographic-consideration">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-cryptographic-consideration" class="section-name selfRef">Cryptographic Considerations</a>
+        </h3>
+<div id="tls-considerations">
+<section id="section-8.5.1">
+          <h4 id="name-tls-considerations">
+<a href="#section-8.5.1" class="section-number selfRef">8.5.1. </a><a href="#name-tls-considerations" class="section-name selfRef">TLS considerations</a>
+          </h4>
+<p id="section-8.5.1-1">The minimum version of TLS MUST be v1.2.<a href="#section-8.5.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.5.1-2">Use only ciphersuites that ensure perfect forward secrecy (PFS) and authenticated encryption with associated data (AEAD). Therefore, encryption should be either AES with GCM or CHACHA20 with POLY1305, while key exchange and authentication SHOULD be part of ECDHE<em>RSA, ECDHE</em>ECDSA, DHE<em>RSA, DHE</em>DSS, CECPQ1 (together with all TLS 1.3 ciphers).<a href="#section-8.5.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.5.1-3">Examples of valid ciphers:<a href="#section-8.5.1-3" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-8.5.1-4">
+<pre>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+</pre><a href="#section-8.5.1-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="jws-signing-algorithms-considerations">
+<section id="section-8.5.2">
+          <h4 id="name-jws-signing-algorithms-cons">
+<a href="#section-8.5.2" class="section-number selfRef">8.5.2. </a><a href="#name-jws-signing-algorithms-cons" class="section-name selfRef">JWS signing algorithms considerations</a>
+          </h4>
+<p id="section-8.5.2-1">The following alghorithms SHALL NOT be allowd:
+ * <em>none:</em> It does not provide any form of authenticity nor integrity
+ * <em>hmac:</em> It does relies on the knowledge of a pre-shared key between OP and RP<a href="#section-8.5.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.5.2-2">It is reccomended to
+1.  Not use PKCS #1 v1.5 (RS256, RS384, RS512)
+2.  Use PS256, ES256 or better<a href="#section-8.5.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="data-examples">
+<section id="section-9">
+      <h2 id="name-data-examples">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-data-examples" class="section-name selfRef">Data Examples</a>
+      </h2>
+<p id="section-9-1">The following sections show examples about request and responses that are used in the protocol flow.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<div id="auth-redirect-resp">
+<section id="section-9.1">
+        <h3 id="name-authorize-redirect-response">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-authorize-redirect-response" class="section-name selfRef">Authorize redirect response</a>
+        </h3>
+<p id="section-9.1-1">The following is a non-normative example of a response from RP to the customer to start the authentication process. This redirect follow the Section 3.1.2.1 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.1-2">
+<pre>HTTP/1.1 302 Found
+Location: https://op.example.com/authorize
+    ?client_id=3dfd89e1-964b-4ac4-ba46-977fc5f87db9
+    &amp;request_uri=urn:example:Y7AyOKAK
+</pre><a href="#section-9.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.1-3">Note that since we are using <span>[<a href="#OAuth.PAR" class="xref">OAuth.PAR</a>]</span> client_id param can be omitted and used inside the request object.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="auth-req">
+<section id="section-9.2">
+        <h3 id="name-authentication-request">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-authentication-request" class="section-name selfRef">Authentication request</a>
+        </h3>
+<p id="section-9.2-1">The following is a non-normative example of an authentication request to the /authorize endpoint in OP. This request follow the specification defined inSection 3.1.2.1 of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">This request is the result of the redirection response <a href="#auth-redirect-resp">Authorize redirect response</a>. As explained in the <a href="#auth-redirect-resp">Authorize redirect response</a> example client_id param can be omitted here.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.2-3">
+<pre>GET /authorize
+  ?client_id=3dfd89e1-964b-4ac4-ba46-977fc5f87db9
+  &amp;request_uri=urn:example:Y7AyOKAK
+
+Host: op.example.com
+</pre><a href="#section-9.2-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="succ-auth-resp">
+<section id="section-9.3">
+        <h3 id="name-successful-authorize-respon">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-successful-authorize-respon" class="section-name selfRef">Successful Authorize response</a>
+        </h3>
+<p id="section-9.3-1">The following is a non-normative example of a response from OP when the customer Authenticates and consent to share the information. This response follow the specification described in Section 3.1.2.5. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span><a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.3-2">
+<pre>HTTP/1.1 302 Found
+Location: https://rp.example.com/cb
+    ?code=SplxlOBeZQQYbYS6WxSbIA
+    &amp;state=af0ifjsldkj
+</pre><a href="#section-9.3-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="callback-req">
+<section id="section-9.4">
+        <h3 id="name-callback-rp-request">
+<a href="#section-9.4" class="section-number selfRef">9.4. </a><a href="#name-callback-rp-request" class="section-name selfRef">Callback RP request</a>
+        </h3>
+<p id="section-9.4-1">The following is a non-normative example of a request to the callback RP endpoint containing the code and state.<a href="#section-9.4-1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.4-2">
+<pre>GET /cb
+    ?code=SplxlOBeZQQYbYS6WxSbIA
+    &amp;state=af0ifjsldkj
+
+Host: rp.example.com
+</pre><a href="#section-9.4-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="token-req">
+<section id="section-9.5">
+        <h3 id="name-token-request">
+<a href="#section-9.5" class="section-number selfRef">9.5. </a><a href="#name-token-request" class="section-name selfRef">Token request</a>
+        </h3>
+<p id="section-9.5-1">The following is a non-normative example of a Token Request following the specification described described in the section 3.1.3.1. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-9.5-1" class="pilcrow">¶</a></p>
+<p id="section-9.5-2">The Client MUST be authenticated to the Token Endpoint using the authentication method registered for its client_id, as described in Section <a href="#client-auth-methods">Client Authentication Methods</a>.<a href="#section-9.5-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.5-3">
+<pre>POST /token HTTP/1.1
+Host: op.example.com
+Content-Type: application/x-www-form-urlencoded
+ ?grant_type=authorization_code
+ &amp;code=SplxlOBeZQQYbYS6WxSbIA
+ &amp;redirect_uri=https://rp.example.org/cb
+ &amp;client_assertion_type=urn%3Aietf%3Aparams%3Aoauth%3Aclient-assertion-type%3Ajwt-bearer
+ &amp;client_assertion=eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX3NlY19rZXkifQ.eyJpc3MiOiIzZGZkODllMS05NjRiL
+TRhYzQtYmE0Ni05NzdmYzVmODdkYjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsInN1YiI6IjNkZmQ4OWUxLTk2NGItNGFjNC1i
+YTQ2LTk3N2ZjNWY4N2RiOSIsImlhdCI6MTU3MDAyMjU3NiwibmJmIjoxNTcwMDIyNTc2LCJleHAiOjE1NzAwMjI2MzYsImp0aSI6IjcwMzNhMDV
+lLWQyOGEtNGMwMi04ZTZiLWUzZDI2YzRjZTk5MyJ9.N_sUjuLY9CrGFSLIiow-2I6zqtdCPUMt31St9rQCK9nDmglkyyCj3ZJvvxjNE-c6H6wK7
+mEbL5d1StP1dhK7iARAkDH-7Jm-CxmcnmvbiqINkVjjkzrww3BMfwa87MPXga7C8-5u8VXokbfiCflqFKbQFbKK7MjCz34loM6Mj6fHkV4HYNVD
+zAZv7zPKqjk-WRDJtVRjB2ON0ibVjEL-iNdZQLyN7nm8rto3xB7af5wfTJuvsXIIC1G--vHUZ6A9IxP84fR636IxSSUo8Y76Bp4ShmfqeD0jvTn
+er1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
+</pre><a href="#section-9.5-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="token-resp">
+<section id="section-9.6">
+        <h3 id="name-token-response">
+<a href="#section-9.6" class="section-number selfRef">9.6. </a><a href="#name-token-response" class="section-name selfRef">Token response</a>
+        </h3>
+<p id="section-9.6-1">The following is a non-normative example of a token response following the specifications of described in Section 3.1.3.3. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-9.6-1" class="pilcrow">¶</a></p>
+<p id="section-9.6-2">The id_token parameter is explained in section <a href="#id-token-example">ID token example</a> (with line wraps within values for display purposes only)<a href="#section-9.6-2" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.6-3">
+<pre>HTTP/1.1 200 OK
+  Content-Type: application/json
+  Cache-Control: no-store
+  Pragma: no-cache
+
+  {
+   "access_token": "SlAV32hkKG",
+   "token_type": "Bearer",
+   "refresh_token": "8xLOxBtZp8",
+   "expires_in": 3600,
+   "id_token": "eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6Im9wX2tleV8xIn0.eyJpc3MiOiJodHRwczovL29wLmV4YW1wbGUub
+3JnLyIsImF1ZCI6Imh0dHBzOi8vcnAuZXhhbXBsZS5jb20iLCJzdWIiOiIxNDI1MzY3NDgiLCJub25jZSI6Im4tMDEwX00xNlUzMSIsImF0X2hhc2
+giOiJ6MGNZbk9OQmM5VGRoZ1JVZGxKM0RPNkFyTDJNLXZfNzBpUGo5bG5BbG5RIiwiZ2l2ZW5fbmFtZSI6IkphbmUiLCJmYW1pbHlfbmFtZSI6IkR
+vZSIsImJpcnRoZGF0ZSI6IjE5OTAtMDEtMzAiLCJjZXJ0aWZpZWRfY2xhaW1zIjp7ImNlcnRpZmllZF9naXZlbl9uYW1lIjp7InZhbHVlIjoiSmFu
+ZSIsImVudGl0eSI6IlNhbnRhbmRlciIsImxvYSI6M30sImNlcnRpZmllZF9mYW1pbHlfbmFtZSI6eyJ2YWx1ZSI6IkRvZSIsImVudGl0eSI6IlNhb
+nRhbmRlciIsImxvYSI6M30sImNlcnRpZmllZF9uYXRpb25hbGl0eSI6eyJ2YWx1ZSI6IkJyaXRpc2giLCJlbnRpdHkiOiJTYW50YW5kZXIiLCJsb2
+EiOjN9LCJjZXJ0aWZpZWRfYmlydGhkYXRlIjp7InZhbHVlIjoiMTk5MC0wMS0zMCIsImVudGl0eSI6IlNhbnRhbmRlciIsImxvYSI6M319LCJpYXQ
+iOjE1NjgzNzk4ODQsImV4cCI6MTU2ODM3OTk0NH0.chwTi-Pt9A7t2O1WvAGQzxNBIoQKbxlDThLa946hgNvtMlbPuIdnMfsbxDBZb-paF0JdEXyhHNQvX9AqqZ7j9rfOJrMYqSawmUJCyjO9IppSuucZ3eVcHPzcSuOCdWQl0GQ8rBtFZJbTbX4SP5oavLLb-hZgC-F86Gt-_jAE6sT-zXAR9zsQ4IASNjGJHAbpD36NTK6HC4TsOa77b8cJtYKbwqqBqFDcnyi1uwOusbdg_zI6M5wRpMWIF0LQBiLVnYX-n4gAwWyeGuB4_7iMLfSvIsL0hzaq7pMsRqikHnIceBSfklaEnWyiRdhf0tPNajIaho6pLKAXdWnrCk7DWw"
+  }
+</pre><a href="#section-9.6-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="jws-request-object">
+<section id="section-9.7">
+        <h3 id="name-jws-request-object">
+<a href="#section-9.7" class="section-number selfRef">9.7. </a><a href="#name-jws-request-object" class="section-name selfRef">JWS request object</a>
+        </h3>
+<p id="section-9.7-1">The following is a non-normative example of an authorization request JWT, this example follow the specification described in Section 6. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-9.7-1" class="pilcrow">¶</a></p>
+<p id="section-9.7-2">The request object contain the requested claims inside the payload as described in section 5.5. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>, apart from using scopes as templates this is the preferred way to request claims instead scope directly. Additional JWT object MUST contain the next claims:<a href="#section-9.7-2" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-9.7-3.1">
+            <p id="section-9.7-3.1.1">nbf: The time before which the signed authentication request is unacceptable<a href="#section-9.7-3.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-9.7-3.2">
+            <p id="section-9.7-3.2.1">jti: A unique identifier for the signed authentication request.<a href="#section-9.7-3.2.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+<p id="section-9.7-4">The reason for this two claims is to avoid an attacker in control to the clock on the client to generate long lived JWT Authentication request.<a href="#section-9.7-4" class="pilcrow">¶</a></p>
+<div id="section-9.7-5">
+<pre class="sourcecode lang-json">{
+   "iss": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
+   "aud": "https://op.example.com",
+   "response_type": "code",
+   "client_id": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
+   "redirect_uri": "https://rp.example.org/cb",
+   "scope": "openid",
+   "state": "af0ifjsldkj",
+   "nonce": "n-010_M16U31",
+   "claims":
+    {
+     "id_token":
+      {
+        "given_name": {"essential": true},
+        "family_name": {"essential": true},
+        "passport_number": null,
+        "nationality": null,
+        "birthdate": {"essential": true},
+        "place_of_birth": null
+      }
+    }
+}
+</pre><a href="#section-9.7-5" class="pilcrow">¶</a>
+</div>
+<p id="section-9.7-6">Signing it with the RS512 algorithm results in this Request Object value <span>[<a href="#JWS" class="xref">JWS</a>]</span>, this value is used in the request <a href="#auth-req">Authentication request</a>.<a href="#section-9.7-6" class="pilcrow">¶</a></p>
+<p id="section-9.7-7"> (line wraps within values for display purposes only)<a href="#section-9.7-7" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.7-8">
+<pre>eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6InJwX2tleV8yIn0.eyJpc3MiOiIzZGZkODllMS05NjRiLTRhYzQtYmE0Ni05NzdmYzVmODdk
+YjkiLCJhdWQiOiJodHRwczovL29wLmV4YW1wbGUuY29tIiwicmVzcG9uc2VfdHlwZSI6ImNvZGUiLCJjbGllbnRfaWQiOiIzZGZkODllMS05NjRiLTRh
+YzQtYmE0Ni05NzdmYzVmODdkYjkiLCJyZWRpcmVjdF91cmkiOiJodHRwczovL3JwLmV4YW1wbGUub3JnL2NiIiwic2NvcGUiOiJvcGVuaWQiLCJzdGF0
+ZSI6ImFmMGlmanNsZGtqIiwibm9uY2UiOiJuLTAxMF9NMTZVMzEiLCJjbGFpbXMiOnsiaWRfdG9rZW4iOnsiZ2l2ZW5fbmFtZSI6eyJlc3NlbnRpYWwi
+OnRydWV9LCJmYW1pbHlfbmFtZSI6eyJlc3NlbnRpYWwiOnRydWV9LCJwYXNzcG9ydF9udW1iZXIiOm51bGwsIm5hdGlvbmFsaXR5IjpudWxsLCJiaXJ0
+aGRhdGUiOnsiZXNzZW50aWFsIjp0cnVlfSwicGxhY2Vfb2ZfYmlydGgiOm51bGx9fSwiaWF0IjoxNTY4NzI0OTQ5LCJuYmYiOjE1Njg3MjQ5NDksImV4
+cCI6MTU2ODcyNTAwOSwianRpIjoiYTMyNGM5YWMtYTQ3Yy00MWE4LWFkM2ItMDY5M2IxODE3ZGM5In0.EojFJ5r_FgDGcQS9kjKgwgs759DN6MlS9di_
+LCnwN2le0PFo51fVYKLwupIfnCduY_i2iPgVuCMlx9UM5WV9FdogDf-r1BoF-cp9FLCCd8x-C9VIXKHTXO5jkQ-6jiOG1X00gK7s9-zL7DGlFjXYy8FKiyB1ByZ3onEI4IFFCnJyq3PuTK6UqIYVOOsQ_JgkQvtSdRFVF3jQUzT5bcZb8vGhLL8LGRktfa7CtI-6iHkZzRvcyQvB65hT3yUsC7qxA8UHazHN4n8jIh_vjoMmopMNhFnRzUdEQyuF5l25uJkr5gYbzcrzJPA0byTp4h186muiAxQKWookHSIUNO-ubQ
+</pre><a href="#section-9.7-8" class="pilcrow">¶</a>
+</div>
+<p id="section-9.7-9">This JWS can be validated using the <a href="#example-keys">Example Keys</a><a href="#section-9.7-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="id-token-example">
+<section id="section-9.8">
+        <h3 id="name-id-token-example">
+<a href="#section-9.8" class="section-number selfRef">9.8. </a><a href="#name-id-token-example" class="section-name selfRef">ID token example</a>
+        </h3>
+<p id="section-9.8-1">The following is a non-normative example of an id token returned by the OP following the specifications described in Section 2. of <span>[<a href="#OIDC" class="xref">OIDC</a>]</span>.<a href="#section-9.8-1" class="pilcrow">¶</a></p>
+<div id="section-9.8-2">
+<pre class="sourcecode lang-json">{
+   "iss": "https://op.example.org/",
+   "aud": "3dfd89e1-964b-4ac4-ba46-977fc5f87db9",
+   "sub": "142536748",
+   "txn": "V1StGXR8_Z5jdHi6B-myT",
+   "nonce": "n-010_M16U31",
+   "at_hash":"z0cYnONBc9TdhgRUdlJ3DO6ArL2M-v_70iPj9lnAlnQ",
+   "given_name": "Jane",
+   "family_name" : "Doe",
+   "birthdate": "1990-01-30"
+}
+</pre><a href="#section-9.8-2" class="pilcrow">¶</a>
+</div>
+<p id="section-9.8-3">After signing the JWT and add the mandatory claims we obtain the next <span>[<a href="#JWS" class="xref">JWS</a>]</span>. (line wraps within values for display purposes only)<a href="#section-9.8-3" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-9.8-4">
+<pre>eyJhbGciOiJSUzUxMiIsInR5cCI6IkpXVCIsImtpZCI6Im9wX2tleV8xIn0.eyJpc3MiOiJodHRwczovL29wLmV4YW1wbGUub3JnLyIsIm
+F1ZCI6IjNkZmQ4OWUxLTk2NGItNGFjNC1iYTQ2LTk3N2ZjNWY4N2RiOSIsInN1YiI6IjE0MjUzNjc0OCIsIm5vbmNlIjoibi0wMTBfTTE2
+VTMxIiwiYXRfaGFzaCI6InowY1luT05CYzlUZGhnUlVkbEozRE82QXJMMk0tdl83MGlQajlsbkFsblEiLCJnaXZlbl9uYW1lIjoiSmFuZS
+IsImZhbWlseV9uYW1lIjoiRG9lIiwiYmlydGhkYXRlIjoiMTk5MC0wMS0zMCIsImNlcnRpZmllZF9jbGFpbXMiOnsiY2VydGlmaWVkX2dp
+dmVuX25hbWUiOnsidmFsdWUiOiJKYW5lIiwiZW50aXR5IjoiU2FudGFuZGVyIiwibG9hIjozfSwiY2VydGlmaWVkX2ZhbWlseV9uYW1lIj
+p7InZhbHVlIjoiRG9lIiwiZW50aXR5IjoiU2FudGFuZGVyIiwibG9hIjozfSwiY2VydGlmaWVkX25hdGlvbmFsaXR5Ijp7InZhbHVlIjoi
+QnJpdGlzaCIsImVudGl0eSI6IlNhbnRhbmRlciIsImxvYSI6M30sImNlcnRpZmllZF9iaXJ0aGRhdGUiOnsidmFsdWUiOiIxOTkwLTAxLT
+MwIiwiZW50aXR5IjoiU2FudGFuZGVyIiwibG9hIjozfX0sImlhdCI6MTU2ODc5NTI4NywibmJmIjoxNTY4Nzk1Mjg3LCJleHAiOjE1Njg3
+OTUzNDcsImp0aSI6ImY5MTdkMDcxLTE4NDItNGRkOC1iODZmLTJhN2YwNDIzYzdhMiJ9.d2GDd1Qm_xnb9-Vg12oE3xzgp_Qn4hTEM-gcZ
+EL5kohM44E5JKZbSpgmnKAQMn-fYDl1y5kExaNbruzzu2F2Rsk976YJxKd_R8Wg67FhMFqbOGn71vGRGxT47LhXdCVy1_H0ptoJ8K8hJW3
+3HOrMHoaSQjoKcoBrkzlJSmqAB60zVKo3nGnEhzz8osnWOP9xoRsc0zeM_On9iFhPpELjm-iLUy0tW9u7sGqQOpJLhKfh_721m_i4G1n9lDnQCs9qnjTbJ0ESV4lxLVAZ2ACoWtnCbtvvGEgtMiQMwCd8_RdVvNZIKGbXTinA20x7FXvK
+3AttXH901JkMzwRiG-RUPQ
+</pre><a href="#section-9.8-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="example-keys">
+<section id="section-9.9">
+        <h3 id="name-example-keys">
+<a href="#section-9.9" class="section-number selfRef">9.9. </a><a href="#name-example-keys" class="section-name selfRef">Example Keys</a>
+        </h3>
+<p id="section-9.9-1">The next keys are just for illustrative purposes, should only be used to generate the examples in this documentation.<a href="#section-9.9-1" class="pilcrow">¶</a></p>
+<p id="section-9.9-2">All the sample jws showed in this page have been signed using these keys using the same for RP and OP jwts, in a real implementation each actor in the protocol has his own key pairs.<a href="#section-9.9-2" class="pilcrow">¶</a></p>
+<div id="public-key">
+<section id="section-9.9.1">
+          <h4 id="name-public-key">
+<a href="#section-9.9.1" class="section-number selfRef">9.9.1. </a><a href="#name-public-key" class="section-name selfRef">Public KEY</a>
+          </h4>
+<div class="artwork art-text alignLeft" id="section-9.9.1-1">
+<pre>\-----BEGIN CERTIFICATE-----
+MIIDtTCCAp2gAwIBAgIJAMKR/NsyfcazMA0GCSqGSIb3DQEBBQUAMEUxCzAJBgNV
+BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
+aWRnaXRzIFB0eSBMdGQwHhcNMTIxMTEyMjM0MzQxWhcNMTYxMjIxMjM0MzQxWjBF
+MQswCQYDVQQGEwJBVTETMBEGA1UECBMKU29tZS1TdGF0ZTEhMB8GA1UEChMYSW50
+ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEAvtH4wKLYlIXZlfYQFJtXZVC3fD8XMarzwvb/fHUyJ6NvNStN+H7GHp3/
+QhZbSaRyqK5hu5xXtFLgnI0QG8oE1NlXbczjH45LeHWhPIdc2uHSpzXic78kOugM
+Y1vng4J10PF6+T2FNaiv0iXeIQq9xbwwPYpflViQyJnzGCIZ7VGan6GbRKzyTKcB
+58yx24pJq+CviLXEY52TIW1l5imcjGvLtlCp1za9qBZa4XGoVqHi1kRXkdDSHty6
+lZWj3KxoRvTbiaBCH+75U7rifS6fR9lqjWE57bCGoz7+BBu9YmPKtI1KkyHFqWpx
+aJc/AKf9xgg+UumeqVcirUmAsHJrMwIDAQABo4GnMIGkMB0GA1UdDgQWBBTs83nk
+LtoXFlmBUts3EIxcVvkvcjB1BgNVHSMEbjBsgBTs83nkLtoXFlmBUts3EIxcVvkv
+cqFJpEcwRTELMAkGA1UEBhMCQVUxEzARBgNVBAgTClNvbWUtU3RhdGUxITAfBgNV
+BAoTGEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZIIJAMKR/NsyfcazMAwGA1UdEwQF
+MAMBAf8wDQYJKoZIhvcNAQEFBQADggEBABw7w/5k4d5dVDgd/OOOmXdaaCIKvt7d
+3ntlv1SSvAoKT8d8lt97Dm5RrmefBI13I2yivZg5bfTge4+vAV6VdLFdWeFp1b/F
+OZkYUv6A8o5HW0OWQYVX26zIqBcG2Qrm3reiSl5BLvpj1WSpCsYvs5kaO4vFpMak
+/ICgdZD+rxwxf8Vb/6fntKywWSLgwKH3mJ+Z0kRlpq1g1oieiOm1/gpZ35s0Yuor
+XZba9ptfLCYSggg/qc3d3d0tbHplKYkwFm7f5ORGHDSD5SJm+gI7RPE+4bO8q79R
+PAfbG1UGuJ0b/oigagciHhJp851SQRYf3JuNSc17BnK2L5IEtzjqr+Q=
+-----END CERTIFICATE-----
+</pre><a href="#section-9.9.1-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="private-key">
+<section id="section-9.9.2">
+          <h4 id="name-private-key">
+<a href="#section-9.9.2" class="section-number selfRef">9.9.2. </a><a href="#name-private-key" class="section-name selfRef">Private KEY</a>
+          </h4>
+<div class="artwork art-text alignLeft" id="section-9.9.2-1">
+<pre>\-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAvtH4wKLYlIXZlfYQFJtXZVC3fD8XMarzwvb/fHUyJ6NvNStN
++H7GHp3/QhZbSaRyqK5hu5xXtFLgnI0QG8oE1NlXbczjH45LeHWhPIdc2uHSpzXi
+c78kOugMY1vng4J10PF6+T2FNaiv0iXeIQq9xbwwPYpflViQyJnzGCIZ7VGan6Gb
+RKzyTKcB58yx24pJq+CviLXEY52TIW1l5imcjGvLtlCp1za9qBZa4XGoVqHi1kRX
+kdDSHty6lZWj3KxoRvTbiaBCH+75U7rifS6fR9lqjWE57bCGoz7+BBu9YmPKtI1K
+kyHFqWpxaJc/AKf9xgg+UumeqVcirUmAsHJrMwIDAQABAoIBAQCYKw05YSNhXVPk
+eHLeW/pXuwR3OkCexPrakOmwMC0s2vIF7mChN0d6hvhVlUp68X7V8SnS2JxAGo8v
+iHY+Et3DdwZ3cxnzwh+BEhzgDfoIOmkoGppZPyX/K6klWtbGUrTtSISOWXbvEXQU
+G0qGAvDOzIGTsdMDX7slnU70Ac23JybPY5qBSiE+ky8U4dm2fUHMroWub4QP5vA/
+nqyWqX2FB/MEAbcujaknDQrFCtbmtUYlBbJCKGd9V3cGEqp6H7oH+ah2ofMc91gJ
+mCHk3YyWZB/bcVXH3CA+s1ywvCOVDBZ3Nw7Pt9zIcv6Rl9UKIy+Nx0QjXxR90Hla
+Tr0GHIShAoGBAPsD7uXm+0ksnGyKRYgvlVad8Z8FUFT6bf4B+vboDbx40FO8O/5V
+PraBPC5z8YRSBOQ/WfccPQzakkA28F2pXlRpXu5JcErVWnyyUiKpX5sw6iPenQR2
+JO9hY/GFbKiwUhVHpvWMcXFqFLSQu2A86jPnFFEfG48ZT4IhTzINKJVZAoGBAMKc
+B3YGfVfY9qiRFXzYRdSRLg5c8p/HzuWwXc9vfJ4kQTDkPXe/+nqD67rzeT54uVec
+jKoIrsCu4BfEaoyvOT+1KmUfdEpBgYZuuEC4CZf7dgKbXOpPVvZDMyJ/e7HyqTpw
+mvIYJLPm2fNAcAsnbrNX5mhLwwzEIltbplUUeRdrAoGBAKhZgPYsLkhrZRXevreR
+wkTvdUfD1pbHxtFfHqROCjhnhsFCM7JmFcNtdaFqHYczQxiZ7IqxI7jlNsVek2Md
+3qgaa5LBKlDmOuP67N9WXUrGSaJ5ATIm0qrB1Lf9VlzktIiVH8L7yHHaRby8fQ8U
+i7b3ukaV6HPW895A3M6iyJ8xAoGAInp4S+3MaTL0SFsj/nFmtcle6oaHKc3BlyoP
+BMBQyMfNkPbu+PdXTjtvGTknouzKkX4X4cwWAec5ppxS8EffEa1sLGxNMxa19vZI
+yJaShI21k7Ko3I5f7tNrDNKfPKCsYMEwgnHKluDwfktNTnyW/Uk2dgXuMaXSHHN5
+XZt59K8CgYArGVOWK7LUmf3dkTIs3tXBm4/IMtUZmWmcP9C8Xe/Dg/IdQhK5CIx4
+VXl8rgZNeX/5/4nJ8Q3LrdLau1Iz620trNRGU6sGMs3x4WQbSq93RRbFzfG1oK74
+IOo5yIBxImQOSk5jz31gF9RJb15SDBIxonuWv8qAERyUfvrmEwR0kg==
+-----END RSA PRIVATE KEY-----
+</pre><a href="#section-9.9.2-1" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="acknowledgements">
+<section id="section-10">
+      <h2 id="name-acknowledgements">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="section-10-1">The authors would like to acknowledge James Begg, Roderick Boothby, Desislava Ilieva and Ildefonso Olmedo for their vital support and feedback.<a href="#section-10-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-11">
+      <h2 id="name-normative-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+<dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <time datetime="1997-03">March 1997</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc2119">https://tools.ietf.org/html/rfc2119</a>&gt;</span>. </dd>
+<dt id="JWS">[JWS]</dt>
+<dd>
+<span class="refAuthor">Sakimura, N.</span><span class="refAuthor">, Jones, M.</span><span class="refAuthor">, and J. Bradley</span>, <span class="refTitle">"JSON Web Signature (JWS)"</span>, <time datetime="2015-05">May 2015</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc7515">https://tools.ietf.org/html/rfc7515</a>&gt;</span>. </dd>
+<dt id="RFC2616">[RFC2616]</dt>
+<dd>
+<span class="refAuthor">Fielding, R.</span>, <span class="refTitle">"Hypertext Transfer Protocol -- HTTP/1.1"</span>, <time datetime="1999-06">June 1999</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc2616">https://tools.ietf.org/html/rfc2616</a>&gt;</span>. </dd>
+<dt id="OIDC">[OIDC]</dt>
+<dd>
+<span class="refAuthor">Sakimura, N.</span><span class="refAuthor">, Bradley, J.</span><span class="refAuthor">, Jones, M.</span><span class="refAuthor">, de Medeiros, B.</span><span class="refAuthor">, and C. Mortimore</span>, <span class="refTitle">"OpenID Connect Core 1.0 incorporating errata set 1"</span>, <time datetime="2014-11-08">8 November 2014</time>, <span>&lt;<a href="http://openid.net/specs/openid-connect-core-1_0.html">http://openid.net/specs/openid-connect-core-1_0.html</a>&gt;</span>. </dd>
+<dt id="OAuth.PAR">[OAuth.PAR]</dt>
+<dd>
+<span class="refAuthor">Sakimura, N.</span><span class="refAuthor">, Lodderstedt, T.</span><span class="refAuthor">, Campbell, B.</span><span class="refAuthor">, Tonge, D.</span><span class="refAuthor">, and F. Skokan</span>, <span class="refTitle">"OAuth 2.0 Pushed Authorization Requests draft-lodderstedt-oauth-par-01"</span>, <time datetime="2019-11-02">2 November 2019</time>, <span>&lt;<a href="https://tools.ietf.org/html/draft-lodderstedt-oauth-par-01">https://tools.ietf.org/html/draft-lodderstedt-oauth-par-01</a>&gt;</span>. </dd>
+<dt id="URN">[URN]</dt>
+<dd>
+<span class="refAuthor">Moats, R.</span>, <span class="refTitle">"Uniform Resource Names"</span>, <time datetime="1997-05">May 1997</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc2141">https://tools.ietf.org/html/rfc2141</a>&gt;</span>. </dd>
+<dt id="RFC8417">[RFC8417]</dt>
+<dd>
+<span class="refAuthor">Hunt, Ed., P.</span><span class="refAuthor">, Jones, M.</span><span class="refAuthor">, Denniss, W.</span><span class="refAuthor">, and M. Ansari</span>, <span class="refTitle">"Security Event Token (SET)"</span>, <time datetime="2018-07">July 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8417">https://www.rfc-editor.org/info/rfc8417</a>&gt;</span>. </dd>
+<dt id="OAuth.NativeApps">[OAuth.NativeApps]</dt>
+<dd>
+<span class="refAuthor">Denniss, W.</span><span class="refAuthor"> and J. Bradley</span>, <span class="refTitle">"OAuth 2.0 for Native Apps"</span>, <time datetime="2017-10">October 2017</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc8252">https://tools.ietf.org/html/rfc8252</a>&gt;</span>. </dd>
+<dt id="OAuth2.0">[OAuth2.0]</dt>
+<dd>
+<span class="refAuthor">Hardt, C.</span>, <span class="refTitle">"The OAuth 2.0 Authorization Framework"</span>, <time datetime="2012-10">October 2012</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc6749">https://tools.ietf.org/html/rfc6749</a>&gt;</span>. </dd>
+<dt id="JWT">[JWT]</dt>
+<dd>
+<span class="refAuthor">Sakimura, N.</span><span class="refAuthor">, Jones, M.</span><span class="refAuthor">, and J. Bradley</span>, <span class="refTitle">"JSON Web Token (JWT)"</span>, <time datetime="2015-05">May 2015</time>, <span>&lt;<a href="https://tools.ietf.org/html/rfc7519">https://tools.ietf.org/html/rfc7519</a>&gt;</span>. </dd>
+<dt id="OAuth.Multiple.Responses">[OAuth.Multiple.Responses]</dt>
+<dd>
+<span class="refAuthor">de Medeiros, B.</span><span class="refAuthor">, Scurtescu, M.</span><span class="refAuthor">, Tarjan, P.</span><span class="refAuthor">, and M. B. Jones</span>, <span class="refTitle">"OAuth 2.0 Multiple Response Type Encoding Practices"</span>, <time datetime="2014-02-25">25 February 2014</time>, <span>&lt;<a href="https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html">https://openid.net/specs/oauth-v2-multiple-response-types-1_0.html</a>&gt;</span>. </dd>
+<dt id="OAuth.MTLS">[OAuth.MTLS]</dt>
+<dd>
+<span class="refAuthor">Sakimura, N.</span><span class="refAuthor">, Lodderstedt, T.</span><span class="refAuthor">, Campbell, B.</span><span class="refAuthor">, and J. Bradley</span>, <span class="refTitle">"OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens"</span>, <time datetime="2018-01">January 2018</time>, <span>&lt;<a href="https://tools.ietf.org/id/draft-ietf-oauth-mtls-07.html">https://tools.ietf.org/id/draft-ietf-oauth-mtls-07.html</a>&gt;</span>. </dd>
+</dl>
+</section>
+<div id="iana-considerations">
+<section id="section-appendix.a">
+      <h2 id="name-iana-considerations">
+<a href="#section-appendix.a" class="section-number selfRef">Appendix A. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<div id="registry-contents">
+<section id="section-a.1">
+        <h2 id="name-registry-contents">
+<a href="#section-a.1" class="section-number selfRef">A.1. </a><a href="#name-registry-contents" class="section-name selfRef">Registry Contents</a>
+        </h2>
+<p id="section-a.1-1">TBD...<a href="#section-a.1-1" class="pilcrow">¶</a></p>
+<ul>
+<li id="section-a.1-2.1">
+            <p id="section-a.1-2.1.1">txn: review if already exist.<a href="#section-a.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-a.1-2.2">
+            <p id="section-a.1-2.2.1">errors: response parameter in PAR.<a href="#section-a.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+<li id="section-a.1-2.3">
+            <p id="section-a.1-2.3.1">digital<em>trust</em>protocol_extension: for metadata.<a href="#section-a.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+</ul>
+</section>
+</div>
+</section>
+</div>
+<div id="notices">
+<section id="section-appendix.b">
+      <h2 id="name-notices">
+<a href="#section-appendix.b" class="section-number selfRef">Appendix B. </a><a href="#name-notices" class="section-name selfRef">Notices</a>
+      </h2>
+<p id="section-appendix.b-1">MIT License<a href="#section-appendix.b-1" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-2">Copyright (c) 2020 Grupo Santander<a href="#section-appendix.b-2" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-3">Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:<a href="#section-appendix.b-3" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-4">The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.<a href="#section-appendix.b-4" class="pilcrow">¶</a></p>
+<p id="section-appendix.b-5">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.<a href="#section-appendix.b-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="document-history">
+<section id="section-appendix.c">
+      <h2 id="name-document-history">
+<a href="#section-appendix.c" class="section-number selfRef">Appendix C. </a><a href="#name-document-history" class="section-name selfRef">Document History</a>
+      </h2>
+<p id="section-appendix.c-1">[[ To be removed from the final specification ]]<a href="#section-appendix.c-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="section-appendix.d">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Alberto Pulido Moyano</span></div>
+<div dir="auto" class="left"><span class="org">Santander Technology</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:alberto.pulido@santander.co.uk" class="email">alberto.pulido@santander.co.uk</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Victor Herraiz Posada</span></div>
+<div dir="auto" class="left"><span class="org">Santander Technology</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:victor.herraiz@santander.co.uk" class="email">victor.herraiz@santander.co.uk</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Miguel Revesado</span></div>
+<div dir="auto" class="left"><span class="org">Santander Technology</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:miguel.revesado@santander.co.uk" class="email">miguel.revesado@santander.co.uk</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Jorge Oliva Fernandez</span></div>
+<div dir="auto" class="left"><span class="org">Santander Technology</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:Jorge.OlivaFernandez@santander.co.uk" class="email">Jorge.OlivaFernandez@santander.co.uk</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Davide Bianchini</span></div>
+<div dir="auto" class="left"><span class="org">Santander Technology</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:davide.bianchini@santander.co.uk" class="email">davide.bianchini@santander.co.uk</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
