@@ -381,7 +381,7 @@ In case that the Error Response is returned in a redirection step (like Authenti
 
 If the authorization server implement the DTP profile, it SHOULD include the following OAuth/OpenID Provider Metadata parameter in discovery responses:
 
-* "digital_trust_protocol_extension" : A boolean field with value _true_ to inform the RP this OP implement this profile.
+* `digital_trust_protocol_extension` : A boolean field with value _true_ to inform the RP this OP implement this profile.
 
 # Security Considerations {#security-considerations}
 
@@ -391,16 +391,16 @@ For authorizing users in native apps the best practice described in RFC [@!OAuth
 
 ## Client Authentication Methods {#client-auth-methods}
 
-To enhance security implementations MUST only support and allow private_key_jwt as Client Authentication method, described in Section 9. of [@!OIDC].
+To enhance security implementations MUST only support and allow `private_key_jwt` as Client Authentication method, described in Section 9. of [@!OIDC].
 
 The reasons for this specification to do not allow other Client Authentication Methods are:
 
-* _none:_ is not an authentication method so is not allowed.
-* _client\_secret\_basic_ and _client\_secret\_post_ send over the network the complete credential that can be intercepted.
-* _client\_secret\_jwt_ is based on a shared secret and is a less secure version of the _private\_key\_jwt_.
-* _tls\_client\_auth_ and _self\_signed\_tls\_client\_auth_ described in specification [@!OAuth.MTLS], are discarded because bind Network and Authentication layer.
+* `none`: is not an authentication method so is not allowed.
+* `client_secret_basic` and `client_secret_post` send over the network the complete credential that can be intercepted.
+* `client_secret_jwt` is based on a shared secret and is a less secure version of the `private_key_jwt`.
+* `tls_client_auth` and `self_signed_tls_client_auth` described in specification [@!OAuth.MTLS], are discarded because bind Network and Authentication layer.
 
-During Client Registration, the RP (Client) MUST register a Client Authentication method. If no method is registered, the default method is _private\_key\_jwt_.
+During Client Registration, the RP (Client) MUST register a Client Authentication method. If no method is registered, the default method is `private_key_jwt`.
 
 The supported Client Authentication Methods MAY be expanded if in the future if other method is provided by other implementers that commit with the security level provided by this specification.
 
@@ -450,7 +450,6 @@ The following alghorithms SHALL NOT be allowd:
 It is reccomended to 
 1.  Not use PKCS #1 v1.5 (RS256, RS384, RS512)
 2.  Use PS256, ES256 or better
-
 
 
 # Data Examples
