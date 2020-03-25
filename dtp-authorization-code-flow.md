@@ -1,7 +1,7 @@
 %%%
 title = "Digital Trust Protocol Authorization Code Flow"
 abbrev = "dtp-auth-code"
-ipr = "trust200902"
+ipr = "none"
 area = "Identity"
 workgroup = "connect"
 keyword = ["security", "openid", "authorization", "trust"]
@@ -17,7 +17,7 @@ status = "standard"
 initials="A."
 surname="Pulido"
 fullname="Alberto Pulido Moyano"
-organization="Santander Technology"
+organization="Santander"
     [author.address]
     email = "alberto.pulido@santander.co.uk"
 
@@ -25,23 +25,15 @@ organization="Santander Technology"
 initials="V."
 surname="Herraiz"
 fullname="Victor Herraiz Posada"
-organization="Santander Technology"
+organization="Santander"
     [author.address]
     email = "victor.herraiz@santander.co.uk"
-
-[[author]]
-initials="M."
-surname="Herrero"
-fullname="Miguel Revesado"
-organization="Santander Technology"
-    [author.address]
-    email = "miguel.revesado@santander.co.uk"
 
 [[author]]
 initials="J."
 surname="Oliva, Ed."
 fullname="Jorge Oliva Fernandez"
-organization="Santander Technology"
+organization="Santander"
     [author.address]
     email = "Jorge.OlivaFernandez@santander.co.uk"
 
