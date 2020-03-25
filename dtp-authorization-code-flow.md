@@ -467,13 +467,13 @@ Location: https://op.example.com/authorize
     &request_uri=urn:example:Y7AyOKAK
 ```
 
-Note that since we are using [@!OAuth.PAR] client_id param can be omitted and used inside the request object.
+Note that since we are using [@!OAuth.PAR] `client_id` param can be omitted and used inside the request object.
 
 ## Authentication request {#auth-req}
 
-The following is a non-normative example of an authentication request to the /authorize endpoint in OP. This request follow the specification defined inSection 3.1.2.1 of [@!OIDC]
+The following is a non-normative example of an authentication request to the `/authorize` endpoint in OP. This request follow the specification defined in Section 3.1.2.1 of [@!OIDC]
 
-This request is the result of the redirection response [Authorize redirect response](#auth-redirect-resp). As explained in the [Authorize redirect response](#auth-redirect-resp) example client_id param can be omitted here.
+This request is the result of the redirection response [Authorize redirect response](#auth-redirect-resp). As explained in the [Authorize redirect response](#auth-redirect-resp) example `client_id` param can be omitted here.
 
 ```
 GET /authorize
@@ -496,7 +496,7 @@ Location: https://rp.example.com/cb
 
 ## Callback RP request {#callback-req}
 
-The following is a non-normative example of a request to the callback RP endpoint containing the code and state. 
+The following is a non-normative example of a request to the callback RP endpoint containing the `code` and `state`. 
 
 ```
 GET /cb
@@ -510,7 +510,7 @@ Host: rp.example.com
 
 The following is a non-normative example of a Token Request following the specification described described in the section 3.1.3.1. of [@!OIDC].
 
-The Client MUST be authenticated to the Token Endpoint using the authentication method registered for its client_id, as described in Section [Client Authentication Methods](#client-auth-methods).
+The Client MUST be authenticated to the Token Endpoint using the authentication method registered for its `client_id`, as described in Section [Client Authentication Methods](#client-auth-methods).
 
 ```
 POST /token HTTP/1.1
@@ -533,7 +533,7 @@ er1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
 
 The following is a non-normative example of a token response following the specifications of described in Section 3.1.3.3. of [@!OIDC].
 
-The id_token parameter is explained in section [ID token example](#id-token-example) (with line wraps within values for display purposes only)
+The `id_token` parameter is explained in section [ID token example](#id-token-example) (with line wraps within values for display purposes only)
 
 ```
 HTTP/1.1 200 OK
@@ -563,8 +563,8 @@ The following is a non-normative example of an authorization request JWT, this e
 
 The request object contain the requested claims inside the payload as described in section 5.5. of [@!OIDC], apart from using scopes as templates this is the preferred way to request claims instead scope directly. Additional JWT object MUST contain the next claims:
 
-* nbf: The time before which the signed authentication request is unacceptable
-* jti: A unique identifier for the signed authentication request.
+* `nbf`: The time before which the signed authentication request is unacceptable
+* `jti`: A unique identifier for the signed authentication request.
 
 The reason for this two claims is to avoid an attacker in control to the clock on the client to generate long lived JWT Authentication request.
 
@@ -593,7 +593,7 @@ The reason for this two claims is to avoid an attacker in control to the clock o
 }
 ```
 
-Signing it with the RS512 algorithm results in this Request Object value [@!JWS], this value is used in the request [Authentication request](#auth-req).
+Signing it with the `RS512` algorithm results in this Request Object value [@!JWS], this value is used in the request [Authentication request](#auth-req).
 
  (line wraps within values for display purposes only)
 ```
@@ -611,7 +611,7 @@ This JWS can be validated using the [Example Keys](#example-keys)
 
 ## ID token example {#id-token-example}
 
-The following is a non-normative example of an id token returned by the OP following the specifications described in Section 2. of [@!OIDC].
+The following is a non-normative example of an `id_token` returned by the OP following the specifications described in Section 2. of [@!OIDC].
 
 ```json
 {
@@ -906,9 +906,9 @@ The authors would like to acknowledge James Begg, Roderick Boothby, Desislava Il
 
 TBD...
 
-*   txn: review if already exist.
-*   errors: response parameter in PAR.
-*   digital_trust_protocol_extension: for metadata.
+* `txn`: review if already exist.
+* `errors`: response parameter in PAR.
+* `digital_trust_protocol_extension`: for metadata.
 
 # Notices
 
