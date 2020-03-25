@@ -113,12 +113,12 @@ This is the start of the process, can be initiated and presented to the customer
 
 Once the RP gets the provider selected by the customer the steps to initiate the information interchange are:
 
-1. It is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS. 
+1. It is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
 2. RP sends the request to the Initiate Authorization endpoint in OP to initiate the process, the auhtorization data is sent inside a request object as described in section [Initiate Authorization Request](#initi-auth-req) of this specification.
-3. OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC], additionally MUST validate the _request JWS _ following Section 6.3. of [@!OIDC] specification.
-4. If validations are correct the OP MUST store the JWS and generate a request_uri that identify where is located. As described in [@!OAuth.PAR] specification.
+3. OP MUST validate that the client is correctly authenticate and MUST validate the request object as described in Section 3.1.2.2. of [@!OIDC], additionally MUST validate the `request` JWS following Section 6.3. of [@!OIDC] specification.
+4. If validations are correct the OP MUST store the JWS and generate a `request_uri` that identify where is located. As described in [@!OAuth.PAR] specification.
 5. OP will return to the RP a response with the format described in section [Successful Initiate Authorization Response](#succ-init-auth-resp) of this specification.
-6. In case of any error OP will return an error response as described in section [Initiate Authorization Error Response](#err-init-auth-resp)  of this specification.
+6. In case of any error OP will return an error response as described in section [Initiate Authorization Error Response](#err-init-auth-resp) of this specification.
 
 ### Customer Accepts Request Flow Steps
 
@@ -126,24 +126,24 @@ Once the OP has validated the request JWS from RP, the user authentication and c
 
 1. RP responds to the user with a HTTP 302 redirect response as described in Section 3.1.2.1 of [@!OIDC], containing in Location header the url with the needed params to make an authentication Request to OP. An example of this response can be found in [Authorize redirect response](#auth-redirect-resp)
 2. The customer User Agent follows the redirection and make an Authentication Request to the Authorization Endpoint in OP. Example of the request: [Authentication request](#auth-req).
-3. OP MUST obtain the request JWS from storage using the `request_uri` parameter, OP MUST check that request_uri is still valid and not expired.
-4. OP then MUST validate the request as described in Section 3.1.2.2. of [@!OIDC], OP MUST be aware that even if the request_uri parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
+3. OP MUST obtain the request JWS from storage using the `request_uri` parameter, OP MUST check that `request_uri` is still valid and not expired.
+4. OP then MUST validate the request as described in Section 3.1.2.2. of [@!OIDC], OP MUST be aware that even if the `request_uri` parameter is used, parameters MAY also be passed using the OAuth 2.0 request syntax, parameter values contained in the referenced JWT supersede those passed using the OAuth 2.0 request syntax, as described in Section 6.2. of [@!OIDC].
 5. If the request is valid, the OP attempts to Authenticate the End-User or determines whether the End-User is Authenticated, the way to authenticate the user (user, password, 2FA, cookies... ) is out of the scope of this specification. The normal approach is to present the user one or more pages (steps auth) to authenticate the user. More details in Section 3.1.2.3. of [@!OIDC].
 6. Once customer is authenticated, the Authorization Server MUST obtain an authorization decision before releasing information to the RP, as described in Section 3.1.2.4. of [@!OIDC]. The OP will present an interactive dialog to the customer explaining what are the claims requested by the RP, RP MAY show the data that is going to be share in order to help End-user to take a decision, in this case please follow the security recommendations described in section [Security Considetarions](#security-considerations). The customer then accepts or selects information to share with the RP.
-7. Once customer consents the request, OP will store the consent information (which claims has been consented) and generates an authorization code. 
-8. OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the _redirect\_uri_ and as query parameter the generated _code,_ as described in Section 3.1.2.5. of [@!OIDC]. Example of the response: [Successful Authorize response](#succ-auth-resp). 
+7. Once customer consents the request, OP will store the consent information (which claims has been consented) and generates an authorization code.
+8. OP responds to the user with a HTTP 302 redirect response, with Location header pointing to the `redirect_uri` and as query parameter the generated `code`, as described in Section 3.1.2.5. of [@!OIDC]. Example of the response: [Successful Authorize response](#succ-auth-resp).
 9. In case of any error OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.2.6 of [@!OIDC].
 10. The customer User Agent follows the redirection and makes a request to the RP callback uri, providing the authorization code in the query string, example of the request: [Callback RP request](#callback-req).
 11. RP MUST validate the authorization response following Section 3.1.2.7. of [@!OIDC] specification.
 
 ### RP Token Interchange Flow Steps
 
-If the RP obtains the consent from the customer in form of authorization code, the token interchange process continue with these steps:
+If the RP obtains the consent from the customer in form of authorization `code`, the token interchange process continue with these steps:
 
 1. Is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
-2. RP sends a token request to the OP /token endpoint containing the authorization code, following the specification described in the section 3.1.3.1. of [@!OIDC]. An example of this request in section [Token request](#token-req)
+2. RP sends a token request to the OP `/token` endpoint containing the authorization `code`, following the specification described in the section 3.1.3.1. of [@!OIDC]. An example of this request in section [Token request](#token-req)
 3. OP MUST validate that the client is correctly authenticate and MUST validate the request following the specification in Section 3.1.3.2. of [@!OIDC]. In case of any error OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.3.4. of [@!OIDC]
-4. If validations are correct OP returns a successful response that includes an ID Token and an Access Token as described in Section 3.1.3.3. of [@!OIDC]. An example of response: [Token response](#token-resp). RP must validate the token response as described in Section 3.1.3.5 of [@!OIDC].
+4. If validations are correct OP returns a successful response that includes an `id_token` and an `access_token` as described in Section 3.1.3.3. of [@!OIDC]. An example of response: [Token response](#token-resp). RP must validate the token response as described in Section 3.1.3.5 of [@!OIDC].
 
 # Initiate Authorization Endpoint {#init-auth-endpoint}
 
