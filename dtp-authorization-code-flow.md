@@ -702,7 +702,7 @@ IOo5yIBxImQOSk5jz31gF9RJb15SDBIxonuWv8qAERyUfvrmEwR0kg==
 ```
 
 # Acknowledgements {#acknowledgements}
-The authors would like to acknowledge James Begg, Roderick Boothby, Desislava Ilieva and Ildefonso Olmedo for their vital support and feedback.
+The authors would like to acknowledge James Begg, Roderick Boothby, Desislava Ilieva and Ildefonso Olmedo for their vital support.
 
 {backmatter}
 
