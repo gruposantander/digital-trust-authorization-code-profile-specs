@@ -1,0 +1,23 @@
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Build
+      run: |
+        build.sh
+
+    - name: Deploy
+      uses: crazy-max/ghaction-github-pages@v1.3.0
+      with:
+        repo: gruposantander/digital-trust-docs
+        target_branch: master
+        build_dir: dist
+
