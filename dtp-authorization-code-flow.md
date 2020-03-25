@@ -149,15 +149,15 @@ If the RP obtains the consent from the customer in form of authorization `code`,
 
 This endpoint is a profile of the specification defined in OAuth 2.0 Pushed Authorization Requests [@!OAuth.PAR], see Section [PAR Restrictions and Extension](#par-rest-ext) for more info about differences with the PAR specification.
 
-Initiate Authorization endpoint performs the validation of the request and stores the JWS that is going to be referenced as _request\_uri_ in the Authorization Request.
+Initiate Authorization endpoint performs the validation of the request and stores the JWS that is going to be referenced as `request_uri` in the Authorization Request.
 
 ## Initiate Authorization Request {#initi-auth-req}
 
 Initiate Authorization Request follow the specification described in Section 2.1. of [@!OAuth.PAR].
 
-OP MUST support the use of the HTTP POST method defined in [@!RFC2616] at the Initiate Authorization Endpoint. The Client uses a HTTPS POST to send a parameter "request" with a signed JWT that should contain the data explained in section 3.1.2.1 of [@!OIDC]. Request parameters are serialized using Form Serialization as described in section 13.2. of [@!OIDC]. This JWT is a "Request Object" as described in Section 6 of [@!OIDC].
+OP MUST support the use of the HTTP POST method defined in [@!RFC2616] at the Initiate Authorization Endpoint. The Client uses a HTTPS POST to send a parameter `request` with a signed JWT that should contain the data explained in section 3.1.2.1 of [@!OIDC]. Request parameters are serialized using Form Serialization as described in section 13.2. of [@!OIDC]. This JWT is a "Request Object" as described in Section 6 of [@!OIDC].
 
-The Client MUST authenticate with the Initiate Authorization Endpoint using the authentication method registered for its client_id, as described in Section [Client Authentication Methods.](#client-auth-methods)
+The Client MUST authenticate with the Initiate Authorization Endpoint using the authentication method registered for its `client_id`, as described in Section [Client Authentication Methods.](#client-auth-methods)
 
 The following is a non-normative example of a Initiate Authorization Request. (line wraps within JWS for display purposes only)
 
@@ -190,22 +190,22 @@ The Authorization Server MUST validate the request received as follows:
 
 1. The Authorization Server MUST verify that Client authentication is valid.
 2. The Authorization Server MUST verify that the request fulfils all validations described in section 3.1.2.2 of [@!OIDC].
-3. The Authorization Server MUST verify that the request object is a valid JWS, the signature algorithm is not **none**, and the signature is correct as in clause 6.3 of [@!OIDC].
+3. The Authorization Server MUST verify that the request object is a valid JWS, the signature algorithm is not `none`, and the signature is correct as in section 6.3 of [@!OIDC].
 4. The Authorization Server MUST verify that Client is asking for user claims using scopes (including scope templates) or claims parameter, as described in section 5.4. and 5.5. of [@!OIDC].
 
 If the Authorization Server encounters any error, it MUST return an error response, as per Section [Initiate Authorization Error Response]({#err-init-auth-resp}) in this document.
 
 ## Successful Initiate Authorization Response {#succ-init-auth-resp}
 
-If the verification is successful, the authorization server shall generate a request URI and return a JSON payload that contains request_uri and expires_in claims at the top level with 201 Created HTTP response code, as described in Section 2.2. of [@!OAuth.PAR].
+If the verification is successful, the authorization server shall generate a request URI and return a JSON payload that contains `request_uri` and `expires_in` claims at the top level with 201 Created HTTP response code, as described in Section 2.2. of [@!OAuth.PAR].
 
-The request_uri shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The request URI shall be bound to the client identifier of the client that posted the request object. Since the request URI can be replayed, its lifetime should be short and preferably limited to one-time use.
+The `request_uri` shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The request URI shall be bound to the client identifier of the client that posted the request object. Since the request URI can be replayed, its lifetime should be short and preferably limited to one-time use.
 
 The value of these claims in the JSON payload shall be as follows:
 
-* _request\_uri_ : The request URI corresponding to the request object posted.
-* _expires\_in_ : A JSON number that represents the lifetime of the request URI in seconds. The request URI lifetime is at the discretion of the OP.
-* _errors_: See section [errors member in Successful Initiate Authorization Response](#error-member) for more info about this field.
+* `request_uri`: The request URI corresponding to the request object posted.
+* `expires_in`: A JSON number that represents the lifetime of the request URI in seconds. The request URI lifetime is at the discretion of the OP.
+* `errors`: See section [errors member in Successful Initiate Authorization Response](#error-member) for more info about this field.
 
 The following is a non-normative example of a Initiate Authorization Successful Response:
 
@@ -221,9 +221,9 @@ Content-Type: application/json
 }
 ```
 
-Note that request_uri can be either URL or URN, within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI nor rely on the entropy of the URI for the confidentiality of the request object.
+Note that `request_uri` can be either URL or URN, within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI nor rely on the entropy of the URI for the confidentiality of the request object.
 
-When the request object is stored at the authorization server, the request_uri value typically is a [@!URN].
+When the request object is stored at the authorization server, the `request_uri` value typically is a [@!URN].
 
 ## Initiate Authorization Error Response {#err-init-auth-resp}
 
@@ -231,10 +231,10 @@ A Initiate Authorization Error Response is an OAuth 2.0 Authorization Error Res
 
 In addition to the error codes defined in Section 4.1.2.1 of OAuth 2.0 Authorization Framework [@!OAuth2.0], this specification also defines the following error codes:
 
-* _invalid\_request\_object:_ The parameters inside the request object are invalid, is signed with none algorithm or the signature is not correct.
-* _invalid\_request_: The request not contain the parameter "request".
-* _method\_not\_allowed_: If the request was not POST, the authorization server MUST return a HTTP 405 Method Not Allowed status code.
-* _too\_many\_request_: If the request from the client per a time period goes beyond the number the authorization server allows. the authorization server MUST return a HTTP 429 Too Many Requests status code.
+* `invalid_request_object`: The parameters inside the request object are invalid, is signed with none algorithm or the signature is not correct.
+* `invalid_request`: The request not contain the parameter `request`.
+* `method_not_allowed`: If the request was not POST, the authorization server MUST return a HTTP 405 Method Not Allowed status code.
+* `too_many_request`: If the request from the client per a time period goes beyond the number the authorization server allows. the authorization server MUST return a HTTP 429 Too Many Requests status code.
 
 The following is a non-normative example of an Initiate Authorization Error Response:
 
@@ -252,7 +252,7 @@ Pragma: no-cache
 
 ## Initiate Authorization Response Validation
 
-The Client MUST validate that the Inititate Authorization Response contains a valid _request\_uri_ and _expires\_in_ parameters.
+The Client MUST validate that the Inititate Authorization Response contains a valid `request_uri` and `expires_in` parameters.
 
 ## _errors_ member in Successful Initiate Authorization Response {#error-member}
 
