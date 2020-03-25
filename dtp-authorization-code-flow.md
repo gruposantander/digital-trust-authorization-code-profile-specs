@@ -256,13 +256,13 @@ The Client MUST validate that the Inititate Authorization Response contains a va
 
 ## _errors_ member in Successful Initiate Authorization Response {#error-member}
 
-This specification add an additional field called _errors_ in the successful response of the initiate authorize response, the original fields (request_uri and expires_in) are described in in Section 2.2. of [@!OAuth.PAR].
+This specification add an additional field called `errors` in the successful response of the initiate authorize response, the original fields (`request_uri` and `expires_in`) are described in in Section 2.2. of [@!OAuth.PAR].
 
-_errors_ member is an OPTIONAL field of type array that contain a list of errors that are detected in the _claims request parameter_ (see section 5.5. of [@!OIDC].
+`errors` member is an OPTIONAL field of type array that contain a list of errors that are detected in the `claims` request parameter (see section 5.5. of [@!OIDC].
 
-The purpose of this new field is to avoid the RP wait until the end of the process when exchange the code for the id_token in the /token endpoint or when obtain the claims in the user info endpoint using the access_token to know about an error in the request syntax, this fields give the RP a quick feedback in the success response, this means that RP can continue with the process but is already aware about the problem.
+The purpose of this new field is to avoid the RP wait until the end of the process when exchange the code for the `id_token` in the `/token` endpoint or when obtain the claims in the user info endpoint using the `access_token` to know about an error in the request syntax, this fields give the RP a quick feedback in the success response, this means that RP can continue with the process but is already aware about the problem.
 
-The following is a non-normative example of a _errors_ member structure
+The following is a non-normative example of a `errors` member structure
 
 ```
 "errors": [
@@ -281,26 +281,26 @@ The following is a non-normative example of a _errors_ member structure
 
 Each array object contain the next fields:
 
-* "group": The group "id_token" or "userinfo" where claim is requested.
-* "key": The claim name that contain the problem.
-* "description": An error description to help RP developer.
+* `group`: The group `id_token` or `userinfo` where claim is requested.
+* `key`: The claim name that contain the problem.
+* `description`: An error description to help RP developer.
 
 ## PAR Restrictions and Extension {#par-rest-ext}
 
 The Initiate Authorization Endpoint has some restrictions or add ons to the original specification described in [@!OAuth.PAR].
 
-1. The endpoint recommended name is /initiate-authorize.
+1. The endpoint recommended name is `/initiate-authorize`.
 2. OP SHALL require the use of a request object sent in the request parameter.
 3. OP SHALL support only signed JWT request objects, this means OP SHALL REQUIRE request parameter.
-4. OP SHALL ONLY allow _response\_type_ with value code.
+4. OP SHALL ONLY allow _response\_type_ with value `code`.
 5. OP SHALL only support the client authentication methods described in Section [Client Authentication Methods](#client-auth-methods).
 6. OP MAY NOT implement the error validation described in Section "2.3.1.5. Request entity too large" of [@!OAuth.PAR].
-7. OP SHALL REQUIRE scope param contain value _openid._
-8. OP MAY return the _errors_ field in the Successful Initiate Authorization Response to help RP.
+7. OP SHALL REQUIRE scope param contain value `openid`.
+8. OP MAY return the `errors` field in the Successful Initiate Authorization Response to help RP.
 
 # txn Claim
 
-As part of this specification a new claim called txn should be introduced by the OP in all the id_tokens generated and also in the `/userinfo` endpoint responses, this claim as defined in [@!RFC8417] is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.
+As part of this specification a new claim called txn should be introduced by the OP in all the `id_tokens` generated and also in the `/userinfo` endpoint responses, this claim as defined in [@!RFC8417] is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.
 
 This transaction data MUST be stored as long as it is required to store transaction data for auditing purposes by the respective regulation.
 
@@ -310,7 +310,7 @@ Note: The mechanism to obtain the transaction details from the OP and their form
 
 # OpenID Restrictions and Extensions
 
-## Client (aka RP)
+## Client (aka RP)`
 
 A client specification statements are:
 
