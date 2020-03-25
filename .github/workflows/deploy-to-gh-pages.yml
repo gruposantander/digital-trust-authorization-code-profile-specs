@@ -12,7 +12,7 @@ jobs:
 
     - name: Build
       run: |
-        build.sh
+        ./build.sh
 
     - name: Deploy
       uses: crazy-max/ghaction-github-pages@v1.3.0
