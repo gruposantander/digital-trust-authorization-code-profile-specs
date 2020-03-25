@@ -20,4 +20,5 @@ jobs:
         repo: gruposantander/digital-trust-docs
         target_branch: master
         build_dir: dist
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
 
