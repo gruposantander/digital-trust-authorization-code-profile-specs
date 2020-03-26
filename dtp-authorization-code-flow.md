@@ -130,24 +130,24 @@ Once the OP has validated the request JWS from the RP, the user authentication a
 
 ### RP Token Interchange Flow Steps
 
-If the RP obtains the consent from the customer in form of authorization `code`, the token interchange process continue with these steps:
+If the RP obtains the consent from the customer in the form of an authorization `code`, then the token interchange process continues with these steps:
 
-1. Is RECOMMENDED that RP and OP establish a mutual TLS connection, if not possible communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
-2. RP sends a token request to the OP `/token` endpoint containing the authorization `code`, following the specification described in the section 3.1.3.1. of [@!OIDC]. An example of this request in section [Token request](#token-req)
-3. OP MUST validate that the client is correctly authenticate and MUST validate the request following the specification in Section 3.1.3.2. of [@!OIDC]. In case of any error OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.3.4. of [@!OIDC]
-4. If validations are correct OP returns a successful response that includes an `id_token` and an `access_token` as described in Section 3.1.3.3. of [@!OIDC]. An example of response: [Token response](#token-resp). RP must validate the token response as described in Section 3.1.3.5 of [@!OIDC].
+1. It is RECOMMENDED that the RP and OP establish a mutual TLS connection. Where this is not possible, any communication with the Authorization Server MUST utilize TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
+2. RP sends a token request to the OP `/token` endpoint containing the authorization `code`, following the specification described in the section 3.1.3.1. of [@!OIDC]. An example of this request can be found in section [Token request](#token-req)
+3. The OP MUST validate that the client is correctly authenticated and MUST validate the request, following the specification in Section 3.1.3.2. of [@!OIDC]. In case of an error, the OP will return an error response as described in section [Error Response](#err-resp), and will use the error codes from Section 3.1.3.4. of [@!OIDC]
+4. If the validations are correct, the OP returns a successful response that includes an `id_token` and an `access_token` as described in Section 3.1.3.3. of [@!OIDC]. An example of such a response is: [Token response](#token-resp). RP must validate the token response as described in Section 3.1.3.5 of [@!OIDC].
 
 # Initiate Authorization Endpoint {#init-auth-endpoint}
 
-This endpoint is a profile of the specification defined in OAuth 2.0 Pushed Authorization Requests [@!OAuth.PAR], see Section [PAR Restrictions and Extension](#par-rest-ext) for more info about differences with the PAR specification.
+This endpoint is a profile of the specification as defined in OAuth 2.0 Pushed Authorization Requests [@!OAuth.PAR]. See Section [PAR Restrictions and Extension](#par-rest-ext) for more info regarding any differences relating to the PAR specification.
 
-Initiate Authorization endpoint performs the validation of the request and stores the JWS that is going to be referenced as `request_uri` in the Authorization Request.
+Initiate Authorization endpoint performs the validation of the request and stores the JWS that will be referenced as the `request_uri` in the Authorization Request.
 
 ## Initiate Authorization Request {#initi-auth-req}
 
-Initiate Authorization Request follow the specification described in Section 2.1. of [@!OAuth.PAR].
+The Initiate Authorization Request follows the specification described in Section 2.1. of [@!OAuth.PAR].
 
-OP MUST support the use of the HTTP POST method defined in [@!RFC2616] at the Initiate Authorization Endpoint. The Client uses a HTTPS POST to send a parameter `request` with a signed JWT that should contain the data explained in section 3.1.2.1 of [@!OIDC]. Request parameters are serialized using Form Serialization as described in section 13.2. of [@!OIDC]. This JWT is a "Request Object" as described in Section 6 of [@!OIDC].
+The OP MUST support the use of the HTTP POST method defined in [@!RFC2616] at the Initiate Authorization Endpoint. The Client uses a HTTPS POST to send a parameter `request` with a signed JWT that should contain the data explained in section 3.1.2.1 of [@!OIDC]. Request parameters are serialized using Form Serialization as described in section 13.2. of [@!OIDC]. This JWT is a "Request Object" as described in Section 6 of [@!OIDC].
 
 The Client MUST authenticate with the Initiate Authorization Endpoint using the authentication method registered for its `client_id`, as described in Section [Client Authentication Methods.](#client-auth-methods)
 
@@ -180,10 +180,10 @@ er1U2j77B_X01_3gbLAk6Gz48CPfZsDC6c6jW56mt99YZvjf5DQ
 
 The Authorization Server MUST validate the request received as follows:
 
-1. The Authorization Server MUST verify that Client authentication is valid.
+1. The Authorization Server MUST verify that the Client authentication is valid.
 2. The Authorization Server MUST verify that the request fulfils all validations described in section 3.1.2.2 of [@!OIDC].
 3. The Authorization Server MUST verify that the request object is a valid JWS, the signature algorithm is not `none`, and the signature is correct as in section 6.3 of [@!OIDC].
-4. The Authorization Server MUST verify that Client is asking for user claims using scopes (including scope templates) or claims parameter, as described in section 5.4. and 5.5. of [@!OIDC].
+4. The Authorization Server MUST verify that Client is asking for user claims using the scopes (including scope templates) or claims parameter, as described in section 5.4. and 5.5. of [@!OIDC].
 
 If the Authorization Server encounters any error, it MUST return an error response, as per Section [Initiate Authorization Error Response]({#err-init-auth-resp}) in this document.
 
@@ -191,7 +191,7 @@ If the Authorization Server encounters any error, it MUST return an error respon
 
 If the verification is successful, the authorization server shall generate a request URI and return a JSON payload that contains `request_uri` and `expires_in` claims at the top level with 201 Created HTTP response code, as described in Section 2.2. of [@!OAuth.PAR].
 
-The `request_uri` shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The request URI shall be bound to the client identifier of the client that posted the request object. Since the request URI can be replayed, its lifetime should be short and preferably limited to one-time use.
+The `request_uri` shall be based on a cryptographic random value so that it is difficult to predict for an attacker. The `request_uri` shall be bound to the client identifier of the client that posted the request object. Since the `request_uri` can be replayed, its lifetime should be short and preferably limited to one-time use.
 
 The value of these claims in the JSON payload shall be as follows:
 
@@ -213,9 +213,9 @@ Content-Type: application/json
 }
 ```
 
-Note that `request_uri` can be either URL or URN, within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI nor rely on the entropy of the URI for the confidentiality of the request object.
+Note that `request_uri` can be either a URL or URN - within this spec it is hosted by the authorization server. The advantage of the authorization server hosting the request object is that it does not have to support outbound requests to a client specified request URI, nor rely on the entropy of the URI for the confidentiality of the request object.
 
-When the request object is stored at the authorization server, the `request_uri` value typically is a [@!URN].
+When the request object is stored on the authorization server, the `request_uri` value typically is a [@!URN].
 
 ## Initiate Authorization Error Response {#err-init-auth-resp}
 
@@ -224,9 +224,9 @@ A Initiate Authorization Error Response is an OAuth 2.0 Authorization Error Res
 In addition to the error codes defined in Section 4.1.2.1 of OAuth 2.0 Authorization Framework [@!OAuth2.0], this specification also defines the following error codes:
 
 * `invalid_request_object`: The parameters inside the request object are invalid, is signed with none algorithm or the signature is not correct.
-* `invalid_request`: The request not contain the parameter `request`.
+* `invalid_request`: The request does not contain the parameter `request`.
 * `method_not_allowed`: If the request was not POST, the authorization server MUST return a HTTP 405 Method Not Allowed status code.
-* `too_many_request`: If the request from the client per a time period goes beyond the number the authorization server allows. the authorization server MUST return a HTTP 429 Too Many Requests status code.
+* `too_many_request`: If the request from the client per a specified time period goes beyond the number the authorization server allows, then the authorization server MUST return a HTTP 429 Too Many Requests status code.
 
 The following is a non-normative example of an Initiate Authorization Error Response:
 
@@ -244,15 +244,15 @@ Pragma: no-cache
 
 ## Initiate Authorization Response Validation
 
-The Client MUST validate that the Inititate Authorization Response contains a valid `request_uri` and `expires_in` parameters.
+The Client MUST validate that the Inititate Authorization Response contains valid `request_uri` and `expires_in` parameters.
 
 ## _errors_ member in Successful Initiate Authorization Response {#error-member}
 
-This specification add an additional field called `errors` in the successful response of the initiate authorize response, the original fields (`request_uri` and `expires_in`) are described in in Section 2.2. of [@!OAuth.PAR].
+This specification adds an additional field called `errors` in the successful response of the initiate authorize response,. The original fields (`request_uri` and `expires_in`) are described in in Section 2.2. of [@!OAuth.PAR].
 
-`errors` member is an OPTIONAL field of type array that contain a list of errors that are detected in the `claims` request parameter (see section 5.5. of [@!OIDC].
+The `errors` member is an OPTIONAL field of type array that contains a list of errors that are detected in the `claims` request parameter (see section 5.5. of [@!OIDC].
 
-The purpose of this new field is to avoid the RP wait until the end of the process when exchange the code for the `id_token` in the `/token` endpoint or when obtain the claims in the user info endpoint using the `access_token` to know about an error in the request syntax, this fields give the RP a quick feedback in the success response, this means that RP can continue with the process but is already aware about the problem.
+The purpose of this new field is to avoid the RP having to wait until the end of the process when exchanging the code for the `id_token` in the `/token` endpoint or when obtaining the claims in the user info endpoint using the `access_token` to know about an error in the request syntax. These fields give the RP instant feedback in the success response, meaning the RP can continue with the process, whilst being informed about the issue.
 
 The following is a non-normative example of a `errors` member structure
 
@@ -271,30 +271,30 @@ The following is a non-normative example of a `errors` member structure
 ]
 ```
 
-Each array object contain the next fields:
+Each array object contains the following fields:
 
-* `group`: The group `id_token` or `userinfo` where claim is requested.
-* `key`: The claim name that contain the problem.
-* `description`: An error description to help RP developer.
+* `group`: The group `id_token` or `userinfo` where a claim is requested.
+* `key`: The claim name that contains the problem.
+* `description`: An error description to help the RP developer.
 
 ## PAR Restrictions and Extension {#par-rest-ext}
 
-The Initiate Authorization Endpoint has some restrictions or add ons to the original specification described in [@!OAuth.PAR].
+The Initiate Authorization Endpoint has some restrictions or add ons to the original specification as described in [@!OAuth.PAR].
 
 1. The endpoint recommended name is `/initiate-authorize`.
-2. OP SHALL require the use of a request object sent in the request parameter.
-3. OP SHALL support only signed JWT request objects, this means OP SHALL REQUIRE request parameter.
-4. OP SHALL ONLY allow _response\_type_ with value `code`.
-5. OP SHALL only support the client authentication methods described in Section [Client Authentication Methods](#client-auth-methods).
-6. OP MAY NOT implement the error validation described in Section "2.3.1.5. Request entity too large" of [@!OAuth.PAR].
-7. OP SHALL REQUIRE scope param contain value `openid`.
-8. OP MAY return the `errors` field in the Successful Initiate Authorization Response to help RP.
+2. The OP SHALL require the use of a request object sent in the request parameter.
+3. The OP SHALL support only signed JWT request objects. This means that the OP SHALL REQUIRE a request parameter.
+4. The OP SHALL ONLY allow _response\_type_ with value `code`.
+5. The OP SHALL only support the client authentication methods as described in Section [Client Authentication Methods](#client-auth-methods).
+6. The OP MAY NOT implement the error validation described in Section "2.3.1.5. Request entity too large" of [@!OAuth.PAR].
+7. The OP SHALL REQUIRE a scope param containing the value `openid`.
+8. The OP MAY return the `errors` field in the Successful Initiate Authorization Response to help the RP.
 
 # txn Claim
 
-As part of this specification a new claim called txn should be introduced by the OP in all the `id_tokens` generated and also in the `/userinfo` endpoint responses, this claim as defined in [@!RFC8417] is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.
+As part of this specification a new claim called txn should be introduced by the OP in all of the `id_tokens` generated and also in the `/userinfo` endpoint responses. This claim, as defined in [@!RFC8417], is used in the context of this extension to build audit trails across the parties involved in an OpenID Connect transaction.
 
-This transaction data MUST be stored as long as it is required to store transaction data for auditing purposes by the respective regulation.
+This transaction data MUST be stored as long as it is required to store transaction data for auditing purposes by any respective regulation.
 
 The `txn` value MUST allow an RP to obtain these transaction details if needed.  
 
@@ -307,14 +307,14 @@ Note: The mechanism to obtain the transaction details from the OP and their form
 A client specification statements are:
 
 1. MAY support mutual TLS connections.
-2. if mutual TLS is not possible, client SHALL communicate with the Authorization Server using TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
-3. SHALL authenticate when making requests to the Authentication Server at the `/token` and `/initiate-authorize` endpoint, as described in Section [Client Authentication Methods](#client-auth-methods).
+2. If mutual TLS is not possible, the client SHALL communicate with the Authorization Server using TLS. See Section 16.17 of [@!OIDC] for more information on using TLS.
+3. SHALL authenticate when making requests to the Authentication Server at the `/token` and `/initiate-authorize` endpoints, as described in Section [Client Authentication Methods](#client-auth-methods).
 4. SHALL include the `request_uri` parameter as defined in Section 6 of [@!OIDC] in the authentication request;
-5. SHALL additionally send duplicates of the parameters/values using the OAuth 2.0 request syntax where required by the OAuth specification.
-6. SHALL use the initiate authorize endpoint before call the authentication request, as described in section [Initiate Authorization Endpoint](#init-auth-endpoint) of this specification.
-7. SHALL sign the JWT request object sent to initiate authorize endpoint, as described in Section 6.1. of [@!OIDC].
+5. SHALL additionally send duplicates of the parameters/values using the OAuth 2.0 request syntax, where required by the OAuth specification.
+6. SHALL use the initiate authorize endpoint before calling the authentication request, as described in section [Initiate Authorization Endpoint](#init-auth-endpoint) of this specification.
+7. SHALL sign the JWT request object that is sent to the initiate authorize endpoint, as described in Section 6.1. of [@!OIDC].
 8. SHALL NOT use `none` algorithm in JWT.
-9. SHALL require and validate JWS signed ID Token be returned from token endpoint.
+9. SHALL require and validate the JWS signed ID Token to be returned from token endpoint.
 10. SHALL include the `nonce` parameter in authentication request, as described in in Section 3.1.2.1 of [@!OIDC],
 11. Is RECOMMENDED to include the `state` parameters in authentication request, as described in Section _3.1.2.1_ of [@!OIDC],
 12. SHALL use as preferred method for request claims the `claims` parameter inside the JWT request Object as described in section 5.5. of [@!OIDC]
