@@ -63,7 +63,7 @@ We want to define a way that will help customers to share the minimum required l
 
 OIDC provides a mechanism to verify the identity of the End-User based on authentication performed by an Auth Server and retrieval of Basic profile information. We would like to use this mechanism in order to provide certified information via a secure communication protocol, therefore, we chose OpenId as base.
 
-The specification depicted in this document covers only the security profile for Digital Trust Protocol. Any other extensions will also complement the full protocol specifications.
+Further extensions will complement the full protocol specifications.
 
 ## Notational conventions
 
